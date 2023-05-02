@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace BountyfulSushi.Repositories
+namespace BountyfulSushi.Repositories.Interfaces
 {
     public abstract class BaseRepository
     {
