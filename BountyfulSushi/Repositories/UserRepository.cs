@@ -1,4 +1,5 @@
-﻿using BountyfulSushi.Models;
+﻿using Azure;
+using BountyfulSushi.Models;
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +41,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public User GetByFirebaseUserId(string firebaseUserId)
+        public User GetByFireBaseId(string fireBaseId)
         {
             using (var conn = Connection)
             {
@@ -53,9 +54,9 @@ namespace BountyfulSushi.Repositories
                             ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE FirebaseUserId = @FirebaseUserId";
+                        WHERE FireBaseId = @FireBaseId";
 
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
+                    DbUtils.AddParameter(cmd, "@FireBaseId", fireBaseId);
 
                     User user = null;
 
@@ -71,7 +72,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public User GetByUserProfileId(int id)
+        public User GetByUserId(int id)
         {
             using (var conn = Connection)
             {
@@ -92,7 +93,7 @@ namespace BountyfulSushi.Repositories
                             LEFT JOIN UserBounty ub ON ub.UserId = u.Id
                             LEFT JOIN Bounty b ON ub.BountyId = b.Id
                             LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
-                        WHERE u.Id = 2;";
+                        WHERE u.Id = @id;";
 
                     DbUtils.AddParameter(cmd, "@id", id);
 
@@ -100,7 +101,38 @@ namespace BountyfulSushi.Repositories
 
                     var reader = cmd.ExecuteReader();
 
-                    user = MakeUserWithBounties(reader);
+                    while (reader.Read())
+                    {
+                        if (user == null)
+                        {
+                            user = MakeUser(reader);
+                        }
+
+                        if (DbUtils.IsNotDbNull(reader, "BountyId"))
+                        {
+                            Bounty bounty = new Bounty()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("BountyId")),
+                                Name = reader.GetString(reader.GetOrdinal("BountyName")),
+                                Description = reader.GetString(reader.GetOrdinal("BountyDescription")),
+                                Species = reader.GetString(reader.GetOrdinal("Species")),
+                                Location = reader.GetString(reader.GetOrdinal("Location")),
+                                Notes = reader.GetString(reader.GetOrdinal("Notes")),
+                                Difficulty = new Difficulty()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("DifficultyId")),
+                                    Name = reader.GetString(reader.GetOrdinal("DifficultyName"))
+                                }
+                            };
+
+                            if (DbUtils.IsNotDbNull(reader, "DateCompleted"))
+                            {
+                                bounty.DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted");
+                            }
+
+                            user.Bounties.Add(bounty);
+                        }
+                    }
 
                     reader.Close();
 
@@ -116,9 +148,11 @@ namespace BountyfulSushi.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO User (FireBaseId, [Name], Email, ImageLocation, UserTypeId)
-                                        OUTPUT INSERTED.ID
-                                        VALUES (@FireBaseId, @Name, @Email, @ImageLocation, @UserTypeId)";
+                    cmd.CommandText = @"
+                        INSERT INTO User (FireBaseId, [Name], Email, ImageLocation, UserTypeId)
+                        OUTPUT INSERTED.ID
+                        VALUES (@FireBaseId, @Name, @Email, @ImageLocation, @UserTypeId)";
+
                     DbUtils.AddParameter(cmd, "@FireBaseId", user.FireBaseId);
                     DbUtils.AddParameter(cmd, "@Name", user.Name);
                     DbUtils.AddParameter(cmd, "@Email", user.Email);
@@ -135,7 +169,7 @@ namespace BountyfulSushi.Repositories
             return new User()
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseUserId")),
+                FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseId")),
                 Name = reader.GetString(reader.GetOrdinal("Name")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
                 ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
@@ -143,55 +177,9 @@ namespace BountyfulSushi.Repositories
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
                     Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
-                }
+                },
+                Bounties = new List<Bounty>()
             };
-        }
-
-        public User MakeUserWithBounties(SqlDataReader reader)
-        {
-            User user = new User();
-
-            while (reader.Read())
-            {
-                if (user == null)
-                {
-                    user = new User()
-                    {
-                        Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                        FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseUserId")),
-                        Name = reader.GetString(reader.GetOrdinal("Name")),
-                        Email = reader.GetString(reader.GetOrdinal("Email")),
-                        ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
-                        UserType = new UserType()
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                            Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
-                        },
-                        Bounties = new List<Bounty>()
-                    };
-                }
-
-                if (DbUtils.IsNotDbNull(reader, "BountyId"))
-                {
-                    user.Bounties.Add(new Bounty()
-                    {
-                        Id = reader.GetInt32(reader.GetOrdinal("BountyId")),
-                        Name = reader.GetString(reader.GetOrdinal("BountyName")),
-                        Description = reader.GetString(reader.GetOrdinal("BountyDescription")),
-                        Species = reader.GetString(reader.GetOrdinal("Species")),
-                        Location = reader.GetString(reader.GetOrdinal("Location")),
-                        Notes = reader.GetString(reader.GetOrdinal("Notes")),
-                        DateCompleted = reader.GetDateTime(reader.GetOrdinal("DateCompleted")),
-                        Difficulty = new Difficulty()
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("DifficultyId")),
-                            Name = reader.GetString(reader.GetOrdinal("DifficultyName"))
-                        }
-                    });
-                }
-            }
-
-            return user;
         }
     }
 }

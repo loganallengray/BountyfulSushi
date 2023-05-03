@@ -8,9 +8,7 @@ namespace BountyfulSushi.Repositories.Interfaces
     {
         void Add(User user);
         List<User> GetAll();
-        User GetByFirebaseUserId(string firebaseUserId);
-        User GetByUserProfileId(int id);
-        User MakeUser(SqlDataReader reader);
-        User MakeUserWithBounties(SqlDataReader reader);
+        User GetByFireBaseId(string fireBaseId);
+        User GetByUserId(int id);
     }
 }
