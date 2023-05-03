@@ -11,7 +11,7 @@ namespace BountyfulSushi.Models
         public string Species { get; set; }
         public string Location { get; set; }
         public string Notes { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public Nullable<DateTime> DateCompleted { get; set; }
         public Difficulty Difficulty { get; set; }
         public List<User> Users { get; set; }
     }
