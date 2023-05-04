@@ -1,8 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 
-const _apiUrl = "/api/userprofile";
-
+const _apiUrl = "/api/user";
 
 const _doesUserExist = (fireBaseId) => {
     return getToken().then((token) =>
@@ -14,7 +13,7 @@ const _doesUserExist = (fireBaseId) => {
         }).then(resp => resp.ok));
 };
 
-const _saveUser = (userProfile) => {
+const _saveUser = (user) => {
     return getToken().then((token) =>
         fetch(_apiUrl, {
             method: "POST",
@@ -22,7 +21,7 @@ const _saveUser = (userProfile) => {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userProfile)
+            body: JSON.stringify(user)
         }).then(resp => resp.json()));
 };
 
@@ -62,10 +61,10 @@ export const logout = () => {
 };
 
 
-export const register = (userProfile, password) => {
-    return firebase.auth().createUserWithEmailAndPassword(userProfile.email, password)
+export const register = (user, password) => {
+    return firebase.auth().createUserWithEmailAndPassword(user.email, password)
         .then((createResponse) => _saveUser({
-            ...userProfile,
+            ...user,
             fireBaseId: createResponse.user.uid
         }).then(() => _onLoginStatusChangedHandler(true)));
 };
