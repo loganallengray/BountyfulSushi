@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using BountyfulSushi.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BountyfulSushi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;

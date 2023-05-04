@@ -1,4 +1,27 @@
-.App {
+/* Color variables */
+:root {
+  --navy-blue: #253D5B;
+  --gold: #C9A959;
+}
+
+/* Navbar colors */
+.navbar-custom {
+  background-color: var(--navy-blue);
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+  color: var(--gold);
+}
+
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-text:hover {
+  color: var(--gold);
+}
+
+/* Previous Code */
+
+/* .App {
   text-align: center;
 }
 
@@ -32,7 +55,8 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
-}
+} */
