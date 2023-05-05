@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Bounty from './Bounty';
-import { getAllBounties } from "../../modules/bountyManager";
+import { getAllBounties } from "../../modules/BountyManager";
 
 const BountyList = () => {
     const [bounties, setBounties] = useState([]);
+
     const getBounties = () => {
         getAllBounties().then(bounties => setBounties(bounties));
     };

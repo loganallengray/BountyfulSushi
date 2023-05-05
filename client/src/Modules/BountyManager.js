@@ -1,10 +1,21 @@
-import { getToken } from "./authManager";
+import { getToken } from "./AuthManager";
 
 const baseUrl = '/api/bounty';
 
 export const getAllBounties = () => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }).then((res) => res.json())
+    })
+};
+
+export const getUserBounties = (userid) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/user/${userid}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Header from "./components/Header";
 import "./App.css";
 import ApplicationViews from "./components/ApplicationViews";
-import { onLoginStatusChange, me } from "./modules/authManager";
+import { onLoginStatusChange, me } from "./modules/AuthManager";
 import { Spinner } from 'reactstrap';
 
 function App() {
