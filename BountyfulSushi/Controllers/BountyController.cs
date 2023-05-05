@@ -35,6 +35,12 @@ namespace BountyfulSushi.Controllers
             return Ok(_bountyRepository.GetBountyById(id));
         }
 
+        [HttpGet("user/{userid}")]
+        public IActionResult GetUserBounties(int userId)
+        {
+            return Ok(_bountyRepository.GetBountiesByUserId(userId));
+        }
+
         // POST api/<BountyController>
         [HttpPost]
         public IActionResult Post(Bounty bounty)

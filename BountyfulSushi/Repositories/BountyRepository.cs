@@ -101,7 +101,7 @@ namespace BountyfulSushi.Repositories
                 }
             }
         }
-        public List<Bounty> GetBountiesByUserId(int userProfileId)
+        public List<Bounty> GetBountiesByUserId(int userId)
         {
             using (var conn = Connection)
             {
@@ -109,23 +109,17 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT p.Id, p.Title, p.Content, 
-                            p.ImageLocation AS HeaderImage,
-                            p.CreateDateTime, p.PublishDateTime, p.IsApproved,
-                            p.CategoryId, p.UserProfileId,
-                            c.[Name] AS CategoryName,
-                            u.FirstName, u.LastName, u.DisplayName, 
-                            u.Email, u.CreateDateTime, u.ImageLocation AS AvatarImage,
-                            u.UserTypeId, 
-                            ut.[Name] AS UserTypeName
-                        FROM Bounty p
-                            LEFT JOIN Category c ON p.CategoryId = c.id
-                            LEFT JOIN UserProfile u ON p.UserProfileId = u.id
-                            LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
-                        AND p.UserProfileId = @userProfileId";
+                        SELECT b.Id, b.[Name], b.[Description],
+	                        b.Species, b.[Location], b.Notes,
+	                        b.DateCompleted, b.DifficultyId,
+	                        d.[Name] AS DifficultyName
+                        FROM Bounty b
+	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
+	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
+	                        LEFT JOIN [User] u ON ub.UserId = u.Id
+                        WHERE u.Id = 2;";
 
-                    cmd.Parameters.AddWithValue("@userProfileId", userProfileId);
+                    cmd.Parameters.AddWithValue("@userId", userId);
                     var reader = cmd.ExecuteReader();
 
                     var bountys = new List<Bounty>();

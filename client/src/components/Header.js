@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logout } from "../modules/authManager";
+import { logout } from "../modules/AuthManager";
 
 const Header = ({ isLoggedIn, userProfile }) => {
     return (
@@ -18,8 +18,18 @@ const Header = ({ isLoggedIn, userProfile }) => {
                                 </Link>
                             </div>
                             <div className="p-2">
-                                <Link to="/userbounties" className="nav-link navbar-text p-0">
+                                <Link to={`/bounties/user/${userProfile?.id}`} className="nav-link navbar-text p-0">
                                     My Bounties
+                                </Link>
+                            </div>
+                            <div className="p-2">
+                                <Link to={`/bounties`} className="nav-link navbar-text p-0">
+                                    Bounty Management
+                                </Link>
+                            </div>
+                            <div className="p-2">
+                                <Link to={`/users`} className="nav-link navbar-text p-0">
+                                    User Management
                                 </Link>
                             </div>
                         </div>
