@@ -19,6 +19,16 @@
   color: var(--gold);
 }
 
+/* Form CSS */
+
+textarea {
+  border: 1px solid #ced4da;
+}
+
+textarea:focus {
+  border: 1px solid #ced4da;
+}
+
 /* Previous Code */
 
 /* .App {

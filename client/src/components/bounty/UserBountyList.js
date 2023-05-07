@@ -3,12 +3,11 @@ import Bounty from './Bounty';
 import { getUserBounties } from "../../modules/BountyManager";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import NotFound from "../NotFound";
 
 const UserBountyList = ({ userProfile }) => {
     const [bounties, setBounties] = useState([]);
     const { userId } = useParams();
-    const navigate = useNavigate();
-
 
     const getBounties = () => {
         getUserBounties(userId).then(bounties => setBounties(bounties));
@@ -31,7 +30,9 @@ const UserBountyList = ({ userProfile }) => {
             </>
         );
     } else {
-        navigate(`../user/${userProfile?.id}`);
+        return (
+            <NotFound />
+        )
     }
 };
 
