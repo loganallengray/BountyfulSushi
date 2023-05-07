@@ -22,6 +22,13 @@ namespace BountyfulSushi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
             return Ok(_userRepository.GetAll());
         }
 
@@ -53,6 +60,13 @@ namespace BountyfulSushi.Controllers
         [HttpPost]
         public IActionResult Post(User user)
         {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
             user.UserType.Id = 2;
             _userRepository.Add(user);
             return CreatedAtAction(
@@ -61,11 +75,6 @@ namespace BountyfulSushi.Controllers
                 user);
         }
 
-        private User GetCurrentUser()
-        {
-            var fireBaseId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            return _userRepository.GetByFireBaseId(fireBaseId);
-        }
 
         [HttpGet("Me")]
         public IActionResult Me()
@@ -78,6 +87,12 @@ namespace BountyfulSushi.Controllers
             }
 
             return Ok(user);
+        }
+
+        private User GetCurrentUser()
+        {
+            var fireBaseId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userRepository.GetByFireBaseId(fireBaseId);
         }
     }
 }

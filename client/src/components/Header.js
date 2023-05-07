@@ -1,4 +1,5 @@
 import React from "react";
+import HeaderLogic from "./HeaderLogic";
 import { Link } from "react-router-dom";
 import { logout } from "../modules/AuthManager";
 
@@ -10,35 +11,11 @@ const Header = ({ isLoggedIn, userProfile }) => {
             </Link>
             <ul className="navbar-nav justify-content-between w-100">
                 <li className="d-flex"> {isLoggedIn ?
-                    <> {/* Logged in header */}
-                        <div className="d-flex">
-                            <div className="p-2">
-                                <Link to="/bounties" className="nav-link navbar-text p-0">
-                                    Bounties
-                                </Link>
-                            </div>
-                            <div className="p-2">
-                                <Link to={`/bounties/user/${userProfile?.id}`} className="nav-link navbar-text p-0">
-                                    My Bounties
-                                </Link>
-                            </div>
-                            <div className="p-2">
-                                <Link to={`/bounties`} className="nav-link navbar-text p-0">
-                                    Bounty Management
-                                </Link>
-                            </div>
-                            <div className="p-2">
-                                <Link to={`/users`} className="nav-link navbar-text p-0">
-                                    User Management
-                                </Link>
-                            </div>
-                        </div>
-                    </> :
-                    <> {/* Logged out header */}
-                    </>}
+                    <HeaderLogic userProfile={userProfile} />
+                    : ""}
                 </li>
                 <li className="d-flex"> {isLoggedIn ?
-                    <>  {/* Logged in header */}
+                    <>  {/* Logged in account options */}
                         <div className="nav-link navbar-text p-2">
                             {userProfile?.name}
                         </div>
@@ -48,7 +25,7 @@ const Header = ({ isLoggedIn, userProfile }) => {
                             </Link>
                         </div>
                     </> :
-                    <>  {/* Logged out header */}
+                    <> {/* Logged out, login/register */}
                         <div className="p-2">
                             <Link to="/login" className="nav-link navbar-text p-0">
                                 Login
@@ -59,7 +36,8 @@ const Header = ({ isLoggedIn, userProfile }) => {
                                 Register
                             </Link>
                         </div>
-                    </>}
+                    </>
+                }
                 </li>
             </ul>
         </nav>

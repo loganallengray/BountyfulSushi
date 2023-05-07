@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from "react-router-dom";
 import Header from "./components/Header";
 import "./App.css";
-import ApplicationViews from "./components/ApplicationViews";
+import ApplicationView from "./components/ApplicationView";
 import { onLoginStatusChange, me } from "./modules/AuthManager";
 import { Spinner } from 'reactstrap';
 
@@ -29,7 +29,7 @@ function App() {
   return (
     <Router>
       <Header isLoggedIn={isLoggedIn} userProfile={userProfile} />
-      <ApplicationViews isLoggedIn={isLoggedIn} />
+      <ApplicationView isLoggedIn={isLoggedIn} userProfile={userProfile} />
     </Router>
   );
 }
