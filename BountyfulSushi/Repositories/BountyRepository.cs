@@ -27,16 +27,16 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id";
                     var reader = cmd.ExecuteReader();
 
-                    var bountys = new List<Bounty>();
+                    var bounties = new List<Bounty>();
 
                     while (reader.Read())
                     {
-                        bountys.Add(MakeBounty(reader));
+                        bounties.Add(MakeBounty(reader));
                     }
 
                     reader.Close();
 
-                    return bountys;
+                    return bounties;
                 }
             }
         }
@@ -144,16 +144,15 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Bounty ( [Name], [Description], Species, [Location], Notes, DateCompleted, DifficultyId )
+                        INSERT INTO Bounty ( [Name], [Description], Species, [Location], Notes, DifficultyId )
                         OUTPUT INSERTED.ID
-                        VALUES ( @Name, @Description, @Species, @Location, @Notes, @DateCompleted, @DifficultyId )";
+                        VALUES ( @Name, @Description, @Species, @Location, @Notes, @DifficultyId )";
                     cmd.Parameters.AddWithValue("@Name", bounty.Name);
                     cmd.Parameters.AddWithValue("@Description", bounty.Description);
                     cmd.Parameters.AddWithValue("@Species", DbUtils.ValueOrDBNull(bounty.Species));
                     cmd.Parameters.AddWithValue("@Location", DbUtils.ValueOrDBNull(bounty.Location));
                     cmd.Parameters.AddWithValue("@Notes", DbUtils.ValueOrDBNull(bounty.Notes));
-                    cmd.Parameters.AddWithValue("@DateCompleted", null);
-                    cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.Difficulty.Id));
+                    cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.DifficultyId));
 
                     bounty.Id = (int)cmd.ExecuteScalar();
                 }
@@ -188,23 +187,21 @@ namespace BountyfulSushi.Repositories
                 {
                     cmd.CommandText = @"
                         UPDATE Bounty
-                            SET Name = @Name,
-                                Description = @Description, 
+                            SET [Name] = @Name,
+                                [Description] = @Description, 
                                 Species = @Species,
-                                Location = @Location,
+                                [Location] = @Location,
                                 Notes = @Notes,
-                                DateCompleted = @DateCompleted,
-                                DifficultyId = @Location
-                         WHERE Id = @id";
+                                DifficultyId = @DifficultyId
+                         WHERE Id = @Id";
 
-                    cmd.Parameters.AddWithValue("@id", bounty.Id);
+                    cmd.Parameters.AddWithValue("@Id", bounty.Id);
                     cmd.Parameters.AddWithValue("@Name", bounty.Name);
                     cmd.Parameters.AddWithValue("@Description", bounty.Description);
                     cmd.Parameters.AddWithValue("@Species", DbUtils.ValueOrDBNull(bounty.Species));
                     cmd.Parameters.AddWithValue("@Location", DbUtils.ValueOrDBNull(bounty.Location));
                     cmd.Parameters.AddWithValue("@Notes", DbUtils.ValueOrDBNull(bounty.Notes));
-                    cmd.Parameters.AddWithValue("@DateCompleted", DbUtils.ValueOrDBNull(bounty.DateCompleted));
-                    cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.Difficulty.Id));
+                    cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.DifficultyId));
 
                     cmd.ExecuteNonQuery();
                 }

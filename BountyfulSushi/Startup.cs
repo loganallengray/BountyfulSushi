@@ -34,6 +34,7 @@ namespace BountyfulSushi
             IdentityModelEventSource.ShowPII = true;
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IBountyRepository, BountyRepository>();
+            services.AddTransient<IDifficultyRepository, DifficultyRepository>();
 
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
             var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";

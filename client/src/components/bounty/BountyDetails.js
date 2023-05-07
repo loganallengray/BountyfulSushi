@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { getBounty } from "../../modules/BountyManager";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button } from "reactstrap";
+import NotFound from "../NotFound";
+import BountyDetailsLogic from "./BountyDetailsLogic";
 
-const BountyDetails = () => {
-    const [bounty, setBounty] = useState([]);
+const BountyDetails = ({ userProfile }) => {
+    const [bounty, setBounty] = useState({});
     const { id } = useParams();
 
     useEffect(() => {
-        getBounty(id).then(bounties => setBounty(bounties));
+        if (/\d+/.test(id)) {
+            getBounty(id).then(bounty => setBounty(bounty));
+        }
     }, []);
 
     const handleAccept = (e) => {
@@ -41,10 +45,7 @@ const BountyDetails = () => {
                             <div>{bounty.location}</div>
                         </div>
                     </div>
-                    <Form onSubmit={(e) => handleAccept(e)} className="text-center mt-2">
-                        <Label for='name' className="d-block">Accept Bounty?</Label>
-                        <Button color="success">Accept</Button>
-                    </Form>
+                    <BountyDetailsLogic bounty={bounty} userProfile={userProfile} />
                 </CardBody>
             </Card>
         </div>
