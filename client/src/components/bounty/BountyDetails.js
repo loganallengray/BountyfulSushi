@@ -23,7 +23,10 @@ const BountyDetails = () => {
                     <Link to={`..`} className="w-25">
                         <strong>{"<< Back"}</strong>
                     </Link>
-                    <strong className="w-75 text-center">{bounty.name}</strong>
+                    <div className="w-75 text-center">
+                        <strong>{bounty.name}</strong>
+                        <div>{bounty.description}</div>
+                    </div>
                     <div className="text-end w-25">
                         <div>{bounty?.difficulty?.name}</div>
                     </div>
@@ -32,11 +35,10 @@ const BountyDetails = () => {
                     <div className="d-flex justify-content-between">
                         <div>
                             <div>{bounty.species}</div>
-                            <div>{bounty.description}</div>
+                            <div>{bounty.notes}</div>
                         </div>
                         <div className="text-end">
                             <div>{bounty.location}</div>
-                            <div>{bounty.notes}</div>
                         </div>
                     </div>
                     <Form onSubmit={(e) => handleAccept(e)} className="text-center mt-2">

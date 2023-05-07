@@ -117,7 +117,7 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
 	                        LEFT JOIN [User] u ON ub.UserId = u.Id
-                        WHERE u.Id = 2;";
+                        WHERE u.Id = @userId;";
 
                     cmd.Parameters.AddWithValue("@userId", userId);
                     var reader = cmd.ExecuteReader();
