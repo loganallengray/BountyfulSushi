@@ -2,22 +2,46 @@ import React, { useEffect, useState } from "react";
 import { getBounty } from "../../modules/BountyManager";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button } from "reactstrap";
+import UserBountyRemovePopup from "./UserBountyRemovePopup";
 import NotFound from "../NotFound";
-import BountyDetailsLogic from "./BountyDetailsLogic";
 
-const UserBountyDetails = () => {
+const UserBountyDetails = ({ userProfile }) => {
     const [bounty, setBounty] = useState({});
+    const [popup, setPopup] = useState({
+        show: false,
+        userBounty: {}
+    });
+
     const { userId, id } = useParams();
 
     useEffect(() => {
-        if (/\d+/.test(id)) {
-            getBounty(id).then(bounty => setBounty(bounty));
-        }
+        getBountyById();
     }, []);
 
-    const handleRemove = (e) => {
-        e.preventDefault();
+    const getBountyById = () => {
+        if (/\d+/.test(id)) {
+            const userBounty = { userId: userId, bountyId: id }
 
+            getBounty(userBounty).then(bounty => setBounty(bounty));
+        }
+    }
+
+    const handleRemovePopup = (bounty) => {
+        setPopup({
+            show: true, userBounty: {
+                userId: userProfile.id,
+                bountyId: bounty.id,
+                bounty: bounty
+            }
+        })
+    }
+
+    const togglePopup = () => {
+        const copy = { ...popup };
+
+        copy.show = !popup.show;
+
+        setPopup(copy);
     }
 
     return (
@@ -45,12 +69,13 @@ const UserBountyDetails = () => {
                             <div>{bounty.location}</div>
                         </div>
                     </div>
-                    <Form onSubmit={(e) => handleRemove(e)} className="text-center mt-2">
+                    <div className="text-center mt-2">
                         <Label for='remove' className="d-block">Remove Bounty?</Label>
-                        <Button color="danger">Remove</Button>
-                    </Form>
+                        <Button color="danger" onClick={e => handleRemovePopup(bounty)}>Remove</Button>
+                    </div>
                 </CardBody>
             </Card>
+            <UserBountyRemovePopup popup={popup} togglePopup={togglePopup} />
         </div>
     )
 }

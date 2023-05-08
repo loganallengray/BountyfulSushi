@@ -11,10 +11,11 @@ namespace BountyfulSushi.Repositories.Interfaces
         List<Bounty> AdminGetAll();
         List<Bounty> GetAll();
         List<Bounty> GetBountiesByUserId(int userProfileId);
-        Bounty GetBountyById(int id);
+        Bounty AdminGetBountyById(int id);
+        Bounty GetBountyById(UserBounty userBounty);
         Bounty MakeBounty(SqlDataReader reader);
         void Update(Bounty bounty);
         void UserAccept(UserBounty userBounty);
-        void UserRemove(int id);
+        void UserRemove(UserBounty userBounty);
     }
 }
