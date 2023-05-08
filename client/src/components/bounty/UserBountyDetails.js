@@ -5,9 +5,9 @@ import { Card, CardBody, Form, FormGroup, Label, Button } from "reactstrap";
 import NotFound from "../NotFound";
 import BountyDetailsLogic from "./BountyDetailsLogic";
 
-const BountyDetails = ({ userProfile }) => {
+const UserBountyDetails = () => {
     const [bounty, setBounty] = useState({});
-    const { id } = useParams();
+    const { userId, id } = useParams();
 
     useEffect(() => {
         if (/\d+/.test(id)) {
@@ -15,11 +15,16 @@ const BountyDetails = ({ userProfile }) => {
         }
     }, []);
 
+    const handleRemove = (e) => {
+        e.preventDefault();
+
+    }
+
     return (
         <div className="container mt-3 mb-1">
             <Card className="mb-3 p-4">
                 <div className="d-flex justify-content-between">
-                    <Link to={`..`} className="w-25">
+                    <Link to={`../user/${userId}`} className="w-25">
                         <strong>{"<< Back"}</strong>
                     </Link>
                     <div className="w-75 text-center">
@@ -40,11 +45,14 @@ const BountyDetails = ({ userProfile }) => {
                             <div>{bounty.location}</div>
                         </div>
                     </div>
-                    <BountyDetailsLogic bounty={bounty} userProfile={userProfile} />
+                    <Form onSubmit={(e) => handleRemove(e)} className="text-center mt-2">
+                        <Label for='remove' className="d-block">Remove Bounty?</Label>
+                        <Button color="danger">Remove</Button>
+                    </Form>
                 </CardBody>
             </Card>
         </div>
     )
 }
 
-export default BountyDetails;
+export default UserBountyDetails;

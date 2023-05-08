@@ -9,6 +9,7 @@ import BountyAddForm from "./bounty/BountyAddForm";
 import BountyEditForm from "./bounty/BountyEditForm";
 import UserBountyList from "./bounty/UserBountyList";
 import NotFound from "./NotFound";
+import UserBountyDetails from "./bounty/UserBountyDetails";
 
 const ApplicationView = ({ isLoggedIn, userProfile }) => {
     if (userProfile?.userType?.id === 1) {
@@ -22,6 +23,7 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                         <Route path="add" element={isLoggedIn ? <BountyAddForm /> : <Navigate to="/login" />} />
                         <Route path="edit/:id" element={isLoggedIn ? <BountyEditForm /> : <Navigate to="/login" />} />
                         <Route path="user/:userId" element={isLoggedIn ? <UserBountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
+                        <Route path="user/:userId/:id" element={isLoggedIn ? <UserBountyDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
                     </Route>
                     {/* <Route path="users">
                         <Route path=":id" element={isLoggedIn ? <UserVideos /> : <Navigate to="/login" />} />
@@ -41,6 +43,7 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                         <Route index element={isLoggedIn ? <BountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
                         <Route path=":id" element={isLoggedIn ? <BountyDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
                         <Route path={`user/:userId`} element={isLoggedIn ? <UserBountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
+                        <Route path="user/:userId/:id" element={isLoggedIn ? <UserBountyDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
