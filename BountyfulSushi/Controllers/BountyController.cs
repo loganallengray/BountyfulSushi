@@ -41,10 +41,25 @@ namespace BountyfulSushi.Controllers
         }
 
         // GET api/<BountyController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{id}/{userId}")]
+        public IActionResult Get(int id, int userId)
         {
-            return Ok(_bountyRepository.GetBountyById(id));
+            var currentUser = GetCurrentUser();
+
+            UserBounty userBounty = new UserBounty()
+            {
+                UserId = userId,
+                BountyId = id
+            };
+
+            if (currentUser.UserType.Id == 1)
+            {
+                return Ok(_bountyRepository.AdminGetBountyById(userBounty.BountyId));
+            }
+            else
+            {
+                return Ok(_bountyRepository.GetBountyById(userBounty));
+            }
         }
 
         [HttpGet("user/{userid}")]
@@ -122,7 +137,7 @@ namespace BountyfulSushi.Controllers
                 return Unauthorized();
             }
 
-            _bountyRepository.UserRemove(userBounty.BountyId);
+            _bountyRepository.UserRemove(userBounty);
             return NoContent();
         }
 

@@ -135,7 +135,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public Bounty GetBountyById(int id)
+        public Bounty GetBountyById(UserBounty userBounty)
         {
             using (var conn = Connection)
             {
@@ -163,10 +163,12 @@ namespace BountyfulSushi.Repositories
 	                            LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
 	                            LEFT JOIN [User] u ON ub.UserId = u.Id
 	                            LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
-                            WHERE b.Id = @id
+                            WHERE b.Id = @BountyId
                         END";
 
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@UserId", userBounty.UserId);
+                    cmd.Parameters.AddWithValue("@BountyId", userBounty.BountyId);
+
                     var reader = cmd.ExecuteReader();
 
                     Bounty bounty = null;
@@ -289,7 +291,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public void UserRemove(int id)
+        public void UserRemove(UserBounty userBounty)
         {
             using (var conn = Connection)
             {
@@ -298,8 +300,9 @@ namespace BountyfulSushi.Repositories
                 {
                     cmd.CommandText = @"
                         DELETE FROM UserBounty
-                        WHERE Id = @id";
-                    cmd.Parameters.AddWithValue("@id", id);
+                        WHERE UserId = @UserId AND BountyId = @BountyId;";
+                    cmd.Parameters.AddWithValue("@UserId", userBounty.UserId);
+                    cmd.Parameters.AddWithValue("@BountyId", userBounty.BountyId);
 
                     cmd.ExecuteNonQuery();
                 }

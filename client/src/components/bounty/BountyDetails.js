@@ -10,8 +10,10 @@ const BountyDetails = ({ userProfile }) => {
     const { id } = useParams();
 
     useEffect(() => {
-        if (/\d+/.test(id)) {
-            getBounty(id).then(bounty => setBounty(bounty));
+        if (/\d+/.test(id) && userProfile !== null) {
+            const userBounty = { userId: userProfile.id, bountyId: id }
+
+            getBounty(userBounty).then(bounty => setBounty(bounty));
         }
     }, []);
 
