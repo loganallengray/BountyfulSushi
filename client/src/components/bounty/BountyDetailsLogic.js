@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getBounty } from "../../modules/BountyManager";
+import { addUserBounty, deleteUserBounty, getBounty } from "../../modules/BountyManager";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 import NotFound from "../NotFound";
@@ -8,6 +8,12 @@ const BountyDetailsLogic = ({ bounty, userProfile }) => {
     const handleAccept = (e) => {
         e.preventDefault();
 
+        const userBounty = {
+            userId: userProfile.id,
+            bountyId: bounty.id
+        }
+
+        addUserBounty(userBounty);
     }
 
     const handleComplete = (e) => {

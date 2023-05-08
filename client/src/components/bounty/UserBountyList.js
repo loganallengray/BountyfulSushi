@@ -4,6 +4,7 @@ import { getUserBounties } from "../../modules/BountyManager";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import NotFound from "../NotFound";
+import UserBounty from "./UserBounty";
 
 const UserBountyList = ({ userProfile }) => {
     const [bounties, setBounties] = useState([]);
@@ -23,7 +24,7 @@ const UserBountyList = ({ userProfile }) => {
                 <div className="container mt-4 mb-1">
                     <div className="row justify-content-center">
                         {bounties.map((bounty) => (
-                            <Bounty bounty={bounty} key={bounty.id} />
+                            <UserBounty bounty={bounty} key={bounty.id} userId={userId} />
                         ))}
                     </div>
                 </div>

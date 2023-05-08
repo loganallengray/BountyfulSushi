@@ -28,7 +28,16 @@ namespace BountyfulSushi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_bountyRepository.GetAll());
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id == 1)
+            {
+                return Ok(_bountyRepository.AdminGetAll());
+            }
+            else
+            {
+                return Ok(_bountyRepository.GetAll());
+            }
         }
 
         // GET api/<BountyController>/5
@@ -86,6 +95,34 @@ namespace BountyfulSushi.Controllers
             }
 
             _bountyRepository.Delete(id);
+            return NoContent();
+        }
+
+        [HttpPost("useraccept")]
+        public IActionResult UserBountyPost (UserBounty userBounty)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1 && currentUser.Id != userBounty.UserId)
+            {
+                return Unauthorized();
+            }
+
+            _bountyRepository.UserAccept(userBounty);
+            return CreatedAtAction("Get", new { id = userBounty.Id }, userBounty);
+        }
+
+        [HttpDelete("userremove")]
+        public IActionResult UserBountyDelete(UserBounty userBounty)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1 && currentUser.Id != userBounty.UserId)
+            {
+                return Unauthorized();
+            }
+
+            _bountyRepository.UserRemove(userBounty.BountyId);
             return NoContent();
         }
 

@@ -31,7 +31,7 @@ export const getBounty = (id) => {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
-        }).then((res) => res.json());
+        }).then((res) => res.json())
     })
 };
 
@@ -69,6 +69,32 @@ export const deleteBounty = (id) => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
+        });
+    })
+};
+
+export const addUserBounty = (userBounty) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/useraccept`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userBounty),
+        });
+    })
+};
+
+export const deleteUserBounty = (userBounty) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/userremove`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userBounty),
         });
     })
 };
