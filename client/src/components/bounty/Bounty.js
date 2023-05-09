@@ -4,7 +4,7 @@ import { Button, Card, CardBody } from "reactstrap";
 
 const Bounty = ({ bounty, userProfile, handleDeletePopup }) => {
     return (
-        <Card className="mb-3 p-2">
+        <Card className={typeof bounty.dateCompleted === "string" ? "mb-3 p-2 complete-bounties" : "mb-3 p-2"}>
             <CardBody>
                 <div className="d-flex justify-content-between">
                     <div>

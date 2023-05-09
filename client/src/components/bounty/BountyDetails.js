@@ -10,16 +10,16 @@ const BountyDetails = ({ userProfile }) => {
     const { id } = useParams();
 
     useEffect(() => {
-        if (/\d+/.test(id) && userProfile !== null) {
-            const userBounty = { userId: userProfile.id, bountyId: id }
+        // if (/\d+/.test(id) && userProfile !== null) {
+        const userBounty = { userId: userProfile.id, bountyId: id }
 
-            getBounty(userBounty).then(bounty => setBounty(bounty));
-        }
+        getBounty(userBounty).then(bounty => setBounty(bounty));
+        // }
     }, []);
 
     return (
         <div className="container mt-3 mb-1">
-            <Card className="mb-3 p-4">
+            <Card className={typeof bounty.dateCompleted === "string" ? "mb-3 p-4 complete-bounties" : "mb-3 p-4"}>
                 <div className="d-flex justify-content-between">
                     <Link to={`..`} className="w-25">
                         <strong>{"<< Back"}</strong>
