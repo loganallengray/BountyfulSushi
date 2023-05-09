@@ -57,7 +57,7 @@ namespace BountyfulSushi.Repositories
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
-                        WHERE b.DateCompleted IS NULL AND ub.userId = @userId OR ub.userId IS NULL
+                        WHERE b.DateCompleted IS NULL AND ub.userId != @userId OR ub.userId IS NULL
                         GROUP BY b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
@@ -142,7 +142,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public Bounty GetBountyById(UserBounty userBounty)
+        public Bounty GetBountyById(int id)
         {
             using (var conn = Connection)
             {
@@ -150,60 +150,62 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        IF NOT EXISTS
-	                    (
-		                    SELECT Id, UserId, BountyId FROM UserBounty
-		                    WHERE UserId != @UserId AND BountyId = @BountyId
-	                    )
-                        
-                        BEGIN
-                            SELECT b.Id, b.[Name], b.[Description],
-	                            b.Species, b.[Location], b.Notes,
-	                            b.DateCompleted, b.DifficultyId,
-	                            d.[Name] AS DifficultyName,
-	                            ub.UserId, u.FireBaseId, 
-	                            u.[Name] AS UserName, u.Email,
-                                u.ImageLocation AS UserImageLocation, 
-	                            u.UserTypeId, ut.[Name] AS UserTypeName
-                            FROM Bounty b
-	                            LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
-	                            LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
-	                            LEFT JOIN [User] u ON ub.UserId = u.Id
-	                            LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
-                            WHERE b.Id = @BountyId
-                        END";
+                        SELECT b.Id, b.[Name], b.[Description],
+	                        b.Species, b.[Location], b.Notes,
+	                        b.DateCompleted, b.DifficultyId,
+	                        d.[Name] AS DifficultyName,
+	                        ub.UserId
+                        FROM Bounty b
+	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
+	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
+                        WHERE b.Id = @id AND b.DateCompleted IS NULL";
 
-                    cmd.Parameters.AddWithValue("@UserId", userBounty.UserId);
-                    cmd.Parameters.AddWithValue("@BountyId", userBounty.BountyId);
+                    cmd.Parameters.AddWithValue("@id", id);
 
                     var reader = cmd.ExecuteReader();
 
                     Bounty bounty = null;
 
-                    while (reader.Read())
+                    if (reader.Read())
                     {
-                        if (bounty == null)
-                        {
-                            bounty = MakeBounty(reader);
-                        }
+                        bounty = MakeBounty(reader);
+                    }
 
-                        if (DbUtils.IsNotDbNull(reader, "UserId"))
-                        {
-                            bounty.Users.Add(new User()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("UserId")),
-                                FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseId")),
-                                Name = reader.GetString(reader.GetOrdinal("UserName")),
-                                Email = reader.GetString(reader.GetOrdinal("Email")),
-                                ImageLocation = DbUtils.GetNullableString(reader, "UserImageLocation"),
-                                UserType = new UserType()
-                                {
-                                    Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                                    Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
-                                }
-                            });
+                    reader.Close();
 
-                        }
+                    return bounty;
+                }
+            }
+        }
+
+        public Bounty GetUserBountyById(UserBounty userBounty)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT b.Id, b.[Name], b.[Description],
+	                        b.Species, b.[Location], b.Notes,
+	                        b.DateCompleted, b.DifficultyId,
+	                        d.[Name] AS DifficultyName,
+	                        ub.UserId
+                        FROM Bounty b
+	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
+	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
+                        WHERE b.Id = @bountyId AND ub.UserId = @userId";
+
+                    cmd.Parameters.AddWithValue("@bountyId", userBounty.BountyId);
+                    cmd.Parameters.AddWithValue("@userId", userBounty.UserId);
+
+                    var reader = cmd.ExecuteReader();
+
+                    Bounty bounty = null;
+
+                    if (reader.Read())
+                    {
+                        bounty = MakeBounty(reader);
                     }
 
                     reader.Close();

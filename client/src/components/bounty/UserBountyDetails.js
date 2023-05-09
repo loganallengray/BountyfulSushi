@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getBounty } from "../../modules/BountyManager";
+import { getBounty, getUserBounty } from "../../modules/BountyManager";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button } from "reactstrap";
 import UserBountyRemovePopup from "./UserBountyRemovePopup";
@@ -22,7 +22,7 @@ const UserBountyDetails = ({ userProfile }) => {
         if (/\d+/.test(id)) {
             const userBounty = { userId: userId, bountyId: id }
 
-            getBounty(userBounty).then(bounty => setBounty(bounty));
+            getUserBounty(userBounty).then(bounty => setBounty(bounty));
         }
     }
 

@@ -42,7 +42,7 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                     <Route path="bounties">
                         <Route index element={isLoggedIn ? <BountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
                         <Route path=":id" element={isLoggedIn ? <BountyDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
-                        <Route path={`user/:userId`} element={isLoggedIn ? <UserBountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
+                        <Route path="user/:userId" element={isLoggedIn ? <UserBountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
                         <Route path="user/:userId/:id" element={isLoggedIn ? <UserBountyDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
                     </Route>
                 </Route>

@@ -41,31 +41,51 @@ namespace BountyfulSushi.Controllers
         }
 
         // GET api/<BountyController>/5
-        [HttpGet("{id}/{userId}")]
-        public IActionResult Get(int id, int userId)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id == 1)
+            {
+                return Ok(_bountyRepository.AdminGetBountyById(id));
+            }
+            else
+            {
+                return Ok(_bountyRepository.GetBountyById(id));
+            }
+        }
+
+        [HttpGet("{userId}/{bountyId}")]
+        public IActionResult GetUserBounty(int userId, int bountyId)
         {
             var currentUser = GetCurrentUser();
 
             UserBounty userBounty = new UserBounty()
             {
                 UserId = userId,
-                BountyId = id
+                BountyId = bountyId
             };
 
-            if (currentUser.UserType.Id == 1)
+            if (currentUser.UserType.Id == 1 || currentUser.Id == userId)
             {
-                return Ok(_bountyRepository.AdminGetBountyById(userBounty.BountyId));
+                return Ok(_bountyRepository.GetUserBountyById(userBounty));
             }
-            else
-            {
-                return Ok(_bountyRepository.GetBountyById(userBounty));
-            }
+
+            return Unauthorized();
         }
 
         [HttpGet("user/{userid}")]
-        public IActionResult GetUserBounties(int userId)
+        public IActionResult GetUserBountiesByUserId(int userId)
         {
-            return Ok(_bountyRepository.GetBountiesByUserId(userId));
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id == 1 || currentUser.Id == userId)
+            {
+                return Ok(_bountyRepository.GetBountiesByUserId(userId));
+            }
+
+            return Unauthorized();
         }
 
         // POST api/<BountyController>
