@@ -49,20 +49,24 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT b.Id, b.[Name], b.[Description],
+                        SELECT DISTINCT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
-	                        d.[Name] AS DifficultyName,
+	                        d.[Name] AS DifficultyName, 
 	                        ub.UserId AS UBUserId, ub.BountyId AS UBBountyId
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
-                        WHERE b.DateCompleted IS NULL AND ub.userId != @userId OR ub.userId IS NULL
+                        WHERE b.DateCompleted IS NULL AND 
+	                        NOT EXISTS (
+		                        SELECT *
+		                        FROM UserBounty ub2
+		                        WHERE ub2.BountyId = ub.BountyId AND ub2.UserId = @userId OR ub2.UserId IS NULL
+	                        )
                         GROUP BY b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
-	                        d.[Name],
-	                        ub.UserId, ub.BountyId;";
+	                        d.[Name], ub.UserId, ub.BountyId;";
                     cmd.Parameters.AddWithValue("@userId", userId);
 
                     var reader = cmd.ExecuteReader();
