@@ -41,7 +41,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public List<Bounty> GetAll()
+        public List<Bounty> GetAll(int userId)
         {
             using (var conn = Connection)
             {
@@ -57,7 +57,14 @@ namespace BountyfulSushi.Repositories
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
-                        WHERE ub.UserId IS NULL;";
+                        WHERE b.DateCompleted IS NULL AND ub.userId = @userId OR ub.userId IS NULL
+                        GROUP BY b.Id, b.[Name], b.[Description],
+	                        b.Species, b.[Location], b.Notes,
+	                        b.DateCompleted, b.DifficultyId,
+	                        d.[Name],
+	                        ub.UserId, ub.BountyId;";
+                    cmd.Parameters.AddWithValue("@userId", userId);
+
                     var reader = cmd.ExecuteReader();
 
                     var bounties = new List<Bounty>();

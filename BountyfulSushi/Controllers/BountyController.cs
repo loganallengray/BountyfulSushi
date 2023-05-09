@@ -36,7 +36,7 @@ namespace BountyfulSushi.Controllers
             }
             else
             {
-                return Ok(_bountyRepository.GetAll());
+                return Ok(_bountyRepository.GetAll(currentUser.Id));
             }
         }
 
