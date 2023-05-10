@@ -4,7 +4,7 @@
   --gold: #C9A959;
 }
 
-/* Navbar colors */
+/* Navbar Colors and States */
 .navbar-custom {
   background-color: var(--navy-blue);
 }
@@ -16,6 +16,16 @@
 
 .navbar-custom .navbar-brand:hover,
 .navbar-custom .navbar-text:hover {
+  color: var(--gold);
+}
+
+.navbar-custom .navbar-brand:active,
+.navbar-custom .navbar-text:active {
+  color: var(--gold);
+}
+
+.navbar-custom .navbar-brand:focus,
+.navbar-custom .navbar-text:focus {
   color: var(--gold);
 }
 
