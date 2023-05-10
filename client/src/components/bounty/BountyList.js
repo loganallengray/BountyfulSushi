@@ -36,7 +36,7 @@ const BountyList = ({ userProfile }) => {
         <>
             <div className="container mt-3 mb-1">
                 {userProfile?.userType?.id === 1 ?
-                    <div className="text-center mb-2">
+                    <div className="text-center">
                         <Link to="add">
                             <Button color="primary">Add Bounty</Button>
                         </Link>
