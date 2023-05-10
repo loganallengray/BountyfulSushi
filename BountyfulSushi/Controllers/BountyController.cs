@@ -161,6 +161,20 @@ namespace BountyfulSushi.Controllers
             return NoContent();
         }
 
+        [HttpPut("complete")]
+        public IActionResult UserBountyComplete(UserBounty userBounty)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
+            _bountyRepository.Complete(userBounty);
+            return NoContent();
+        }
+
         private User GetCurrentUser()
         {
             var fireBaseId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

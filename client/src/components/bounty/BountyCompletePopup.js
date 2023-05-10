@@ -1,6 +1,7 @@
 import { Modal, ModalBody, Button, ModalHeader, ModalFooter, Label, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import { Form, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { completeBounty } from "../../modules/BountyManager";
 
 const UserBountyCompletePopup = ({ popup, togglePopup }) => {
     const [userChoice, setUserChoice] = useState(0);
@@ -17,8 +18,15 @@ const UserBountyCompletePopup = ({ popup, togglePopup }) => {
     }
 
     const handleComplete = () => {
-        // deleteUserBounty(popup.userBounty)
-        //     .then(e => { navigate(`../user/${popup.userBounty.userId}`) })
+        if (userChoice !== 0) {
+            const userBounty = {
+                userId: userChoice,
+                bountyId: popup.bounty.id
+            }
+
+            completeBounty(userBounty)
+                .then(e => { navigate(`..`) })
+        }
     }
 
     if (popup.bounty.users !== undefined) {

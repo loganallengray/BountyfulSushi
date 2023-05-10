@@ -18,5 +18,6 @@ namespace BountyfulSushi.Repositories.Interfaces
         void Update(Bounty bounty);
         void UserAccept(UserBounty userBounty);
         void UserRemove(UserBounty userBounty);
+        void Complete(UserBounty userBounty);
     }
 }

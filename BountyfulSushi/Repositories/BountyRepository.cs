@@ -2,6 +2,7 @@
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Tabloid.Utils;
 
@@ -365,6 +366,30 @@ namespace BountyfulSushi.Repositories
                     cmd.Parameters.AddWithValue("@Location", DbUtils.ValueOrDBNull(bounty.Location));
                     cmd.Parameters.AddWithValue("@Notes", DbUtils.ValueOrDBNull(bounty.Notes));
                     cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.DifficultyId));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Complete(UserBounty userBounty)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE Bounty
+                            SET DateCompleted = @DateCompleted
+                         WHERE Id = @BountyId
+
+                        DELETE FROM UserBounty
+                        WHERE BountyId = @BountyId AND UserId != @UserId;";
+
+                    cmd.Parameters.AddWithValue("@BountyId", userBounty.BountyId);
+                    cmd.Parameters.AddWithValue("@UserId", userBounty.UserId);
+                    cmd.Parameters.AddWithValue("@DateCompleted", DateTime.Now);
 
                     cmd.ExecuteNonQuery();
                 }
