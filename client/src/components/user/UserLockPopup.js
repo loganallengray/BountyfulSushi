@@ -23,7 +23,7 @@ const UserBountyLockPopup = ({ popup, togglePopup }) => {
             </ModalHeader>
             <ModalBody>
                 <p>
-                    {popup?.user?.name}
+                    {popup?.user?.userName}
                 </p>
                 <p className="mb-1">
                     {popup?.user?.email}

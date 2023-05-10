@@ -34,14 +34,14 @@ const BountyDetailsLogic = ({ bounty, userProfile }) => {
         setPopup({ show: true, bounty: bounty })
     }
 
-    if (userProfile?.userType?.id !== 1) {
+    if (userProfile?.userType?.id !== 1 && bounty?.users?.find(user => user?.id === userProfile?.id) === undefined) {
         return (
             <div className="text-center mt-2">
                 <Label for='accept' className="d-block">Accept Bounty?</Label>
                 <Button color="success" onClick={e => handleAccept()}>Accept</Button>
             </div>
         );
-    } else if (bounty.dateCompleted === null && bounty.users.length !== 0) {
+    } else if (userProfile?.userType?.id === 1 && bounty.dateCompleted === null && bounty.users.length !== 0) {
         return (
             <>
                 <div className="text-center mt-2">

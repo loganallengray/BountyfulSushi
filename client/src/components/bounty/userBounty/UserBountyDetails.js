@@ -66,6 +66,7 @@ const UserBountyDetails = ({ userProfile }) => {
                         </div>
                     </div> : ""}
                 </div>
+                <img src={bounty.imageLocation} width="100%" />
                 <div>
                     <div>
                         {bounty.species}

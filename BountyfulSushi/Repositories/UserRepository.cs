@@ -20,12 +20,13 @@ namespace BountyfulSushi.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.FireBaseId, u.[Name], u.Email,
-                            u.ImageLocation, u.UserTypeId,
-                            ut.[Name] AS UserTypeName
+                        SELECT u.Id, u.FireBaseId, u.UserName, 
+                            u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation, u.Locked,
+                            u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
-                        ORDER BY ut.Id, u.[Name]";
+                        ORDER BY ut.Id, u.UserName;";
                     var reader = cmd.ExecuteReader();
 
                     var users = new List<User>();
@@ -74,9 +75,10 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.FireBaseId, u.[Name], u.Email,
-                            u.ImageLocation, u.UserTypeId,
-                            ut.[Name] AS UserTypeName
+                        SELECT u.Id, u.FireBaseId, u.UserName, 
+                            u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation, u.Locked,
+                            u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                         WHERE FireBaseId = @FireBaseId";
@@ -105,13 +107,14 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.FireBaseId, u.[Name], u.Email,
-                            u.ImageLocation, u.UserTypeId,
-                            ut.[Name] AS UserTypeName,
+                        SELECT u.Id, u.FireBaseId, u.UserName, 
+                            u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation, u.Locked,
+                            u.UserTypeId, ut.[Name] AS UserTypeName,
                             ub.BountyId, b.[Name] AS BountyName,
                             b.[Description] AS BountyDescription,
                             b.Species, b.Location, b.Notes,
-                            b.DateCompleted, b.DifficultyId, 
+                            b.DateCompleted, b.ImageLocation, b.DifficultyId, 
                             d.[Name] as DifficultyName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
@@ -143,6 +146,7 @@ namespace BountyfulSushi.Repositories
                                 Species = reader.GetString(reader.GetOrdinal("Species")),
                                 Location = reader.GetString(reader.GetOrdinal("Location")),
                                 Notes = reader.GetString(reader.GetOrdinal("Notes")),
+                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
                                 Difficulty = new Difficulty()
                                 {
                                     Id = reader.GetInt32(reader.GetOrdinal("DifficultyId")),
@@ -174,14 +178,17 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO User (FireBaseId, [Name], Email, ImageLocation, UserTypeId)
+                        INSERT INTO [User] (FireBaseId, UserName, FirstName, LastName, Email, ImageLocation, Locked, UserTypeId)
                         OUTPUT INSERTED.ID
-                        VALUES (@FireBaseId, @Name, @Email, @ImageLocation, @UserTypeId)";
+                        VALUES (@FireBaseId, @UserName, @FirstName, @LastName, @Email, @ImageLocation, @Locked, @UserTypeId)";
 
                     DbUtils.AddParameter(cmd, "@FireBaseId", user.FireBaseId);
-                    DbUtils.AddParameter(cmd, "@Name", user.Name);
+                    DbUtils.AddParameter(cmd, "@UserName", user.UserName);
+                    DbUtils.AddParameter(cmd, "@FirstName", user.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", user.LastName);
                     DbUtils.AddParameter(cmd, "@Email", user.Email);
                     DbUtils.AddParameter(cmd, "@ImageLocation", user.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@Locked", user.Locked);
                     DbUtils.AddParameter(cmd, "@UserTypeId", user.UserType.Id);
 
                     user.Id = (int)cmd.ExecuteScalar();
@@ -195,8 +202,11 @@ namespace BountyfulSushi.Repositories
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                 FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseId")),
-                Name = reader.GetString(reader.GetOrdinal("Name")),
+                UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                LastName = reader.GetString(reader.GetOrdinal("LastName")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
+                Locked = reader.GetBoolean(reader.GetOrdinal("Locked")),
                 ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                 UserType = new UserType()
                 {

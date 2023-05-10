@@ -73,14 +73,13 @@ namespace BountyfulSushi.Controllers
         [HttpPost]
         public IActionResult Post(User user)
         {
-            var currentUser = GetCurrentUser();
-
-            if (currentUser.UserType.Id != 1)
+            user.UserType = new UserType()
             {
-                return Unauthorized();
-            }
+                Id = 2,
+                Name = "User"
+            };
+            user.Locked = false;
 
-            user.UserType.Id = 2;
             _userRepository.Add(user);
             return CreatedAtAction(
                 nameof(GetUser),

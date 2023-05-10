@@ -38,6 +38,8 @@ const UserList = ({ userProfile }) => {
             <Table hover>
                 <thead>
                     <tr>
+                        <th></th>
+                        <th>Username</th>
                         <th>Full Name</th>
                         <th>User Type</th>
                         <th></th>
@@ -47,11 +49,15 @@ const UserList = ({ userProfile }) => {
                     {users.map((user) => {
                         return (
                             <tr key={user.id}>
+                                <td>
+                                    <img src={user.imageLocation} width="50px" height="50px" className="rounded-images" />
+                                </td>
                                 <td className="align-middle">
                                     <Link to={`${user.id}`}>
-                                        {user.name}
+                                        {user.userName}
                                     </Link>
                                 </td>
+                                <td className="align-middle">{user.firstName} {user.lastName}</td>
                                 <td className="align-middle">{user.userType.name}</td>
                                 <td className="text-end">
                                     <Link to={`edit/${user.id}`}>

@@ -8,7 +8,7 @@ export default function Register() {
 
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
-    const [displayName, setDisplayName] = useState();
+    const [userName, setUserName] = useState();
     const [email, setEmail] = useState();
     const [imageLocation, setImageLocation] = useState();
     const [password, setPassword] = useState();
@@ -22,9 +22,9 @@ export default function Register() {
             const userProfile = {
                 firstName,
                 lastName,
-                displayName,
+                userName,
                 imageLocation,
-                email,
+                email
             };
             register(userProfile, password).then(() => navigate("/"));
         }
@@ -50,11 +50,11 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="displayName">Display Name</Label>
+                    <Label htmlFor="userName">User Name</Label>
                     <Input
-                        id="displayName"
+                        id="userName"
                         type="text"
-                        onChange={(e) => setDisplayName(e.target.value)}
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                 </FormGroup>
                 <FormGroup>

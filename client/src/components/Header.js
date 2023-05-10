@@ -17,7 +17,7 @@ const Header = ({ isLoggedIn, userProfile }) => {
                 <li className="d-flex"> {isLoggedIn ?
                     <>  {/* Logged in account options */}
                         <div className="nav-link navbar-text p-2">
-                            {userProfile?.name}
+                            {userProfile?.userName}
                         </div>
                         <div className="p-2 pe-4">
                             <Link onClick={(e) => logout()} className="nav-link navbar-text p-0">

@@ -27,6 +27,7 @@ const Bounty = ({ bounty, userProfile, handleDeletePopup }) => {
                         : ""}
                 </div>
             </CardBody>
+            <img src={bounty.imageLocation} />
             <CardBody>
                 <CardText className="mb-0">
                     {bounty.location}
