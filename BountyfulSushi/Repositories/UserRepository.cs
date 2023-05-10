@@ -196,6 +196,36 @@ namespace BountyfulSushi.Repositories
             }
         }
 
+        public void Update(User user)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [User]
+                            SET UserName = @UserName,
+                                FirstName = @FirstName, 
+                                LastName = @LastName,
+                                Email = @Email,
+                                ImageLocation = @ImageLocation,
+                                UserTypeId = @UserTypeId
+                         WHERE Id = @Id";
+
+                    cmd.Parameters.AddWithValue("@Id", user.Id);
+                    cmd.Parameters.AddWithValue("@UserName", user.UserName);
+                    cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", DbUtils.ValueOrDBNull(user.LastName));
+                    cmd.Parameters.AddWithValue("@Email", DbUtils.ValueOrDBNull(user.Email));
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(user.ImageLocation));
+                    cmd.Parameters.AddWithValue("@UserTypeId", DbUtils.ValueOrDBNull(user.UserType.Id));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public User MakeUser(SqlDataReader reader)
         {
             return new User()

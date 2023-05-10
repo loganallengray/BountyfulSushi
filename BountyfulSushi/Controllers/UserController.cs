@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using BountyfulSushi.Repositories;
 
 namespace BountyfulSushi.Controllers
 {
@@ -85,6 +86,20 @@ namespace BountyfulSushi.Controllers
                 nameof(GetUser),
                 new { fireBaseId = user.FireBaseId },
                 user);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(User user)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
+            _userRepository.Update(user);
+            return NoContent();
         }
 
 

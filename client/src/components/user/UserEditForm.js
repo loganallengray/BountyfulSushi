@@ -7,7 +7,9 @@ const UserEditForm = ({ userProfile }) => {
     const [userTypes, setUserTypes] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
     const [user, setUser] = useState({
-        name: "",
+        userName: "",
+        firstName: "",
+        lastName: "",
         email: "",
         imageLocation: "",
         userType: {
@@ -41,9 +43,9 @@ const UserEditForm = ({ userProfile }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // editUser(user).then(() => {
-        //     navigate(`/bounties`);
-        // });
+        editUser(user).then(() => {
+            navigate(`..`);
+        });
     }
 
     return (
@@ -52,11 +54,31 @@ const UserEditForm = ({ userProfile }) => {
                 <h2>User Edit Form</h2>
                 <fieldset>
                     <FormGroup>
-                        <Label for='name'>Name</Label>
+                        <Label for='userName'>Username</Label>
                         <Input
-                            id="name"
+                            id="userName"
                             type="text"
-                            value={user.name}
+                            value={user.userName}
+                            required
+                            onChange={(e) => handleChange(e)}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for='firstName'>First Name</Label>
+                        <Input
+                            id="firstName"
+                            type="text"
+                            value={user.firstName}
+                            required
+                            onChange={(e) => handleChange(e)}
+                        />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label for='lastName'>Last Name</Label>
+                        <Input
+                            id="lastName"
+                            type="text"
+                            value={user.lastName}
                             required
                             onChange={(e) => handleChange(e)}
                         />

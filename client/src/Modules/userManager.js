@@ -42,4 +42,17 @@ export const getUserTypes = () => {
             },
         }).then((res) => res.json());
     })
-}
+};
+
+export const editUser = (user) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/${user.id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user)
+        });
+    })
+};
