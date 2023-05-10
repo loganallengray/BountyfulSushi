@@ -32,3 +32,14 @@ export const getUser = (id) => {
         }).then((res) => res.json());
     })
 };
+
+export const getUserTypes = () => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/usertypes`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((res) => res.json());
+    })
+}

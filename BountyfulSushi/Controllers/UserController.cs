@@ -32,6 +32,19 @@ namespace BountyfulSushi.Controllers
             return Ok(_userRepository.GetAll());
         }
 
+        [HttpGet("usertypes")]
+        public IActionResult GetUserTypes()
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_userRepository.GetUserTypes());
+        }
+
         [HttpGet("{fireBaseId}")]
         public IActionResult GetUser(string fireBaseId)
         {

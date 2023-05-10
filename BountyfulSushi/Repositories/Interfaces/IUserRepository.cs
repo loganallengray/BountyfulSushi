@@ -8,6 +8,7 @@ namespace BountyfulSushi.Repositories.Interfaces
     {
         void Add(User user);
         List<User> GetAll();
+        List<UserType> GetUserTypes();
         User GetByFireBaseId(string fireBaseId);
         User GetByUserId(int id);
     }

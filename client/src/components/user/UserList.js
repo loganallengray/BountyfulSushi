@@ -45,11 +45,17 @@ const UserList = ({ userProfile }) => {
                 <tbody>
                     {users.map((user) => {
                         return (
-                            <tr key={user.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`/users/${user.id}`)}>
-                                <td>{user.name}</td>
+                            <tr key={user.id}>
+                                <td>
+                                    <Link to={`${user.id}`}>
+                                        {user.name}
+                                    </Link>
+                                </td>
                                 <td>{user.userType.name}</td>
                                 <td className="text-end">
-                                    <Button color="primary">Edit</Button>
+                                    <Link to={`edit/${user.id}`}>
+                                        <Button color="primary">Edit</Button>
+                                    </Link>
                                     <Button color="danger" className="ms-2">Lock</Button>
                                 </td>
                             </tr>

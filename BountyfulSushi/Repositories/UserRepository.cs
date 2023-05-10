@@ -24,8 +24,8 @@ namespace BountyfulSushi.Repositories
                             u.ImageLocation, u.UserTypeId,
                             ut.[Name] AS UserTypeName
                         FROM [User] u
-                            LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        ORDER BY u.[Name]";
+                            LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
+                        ORDER BY ut.Id, u.[Name]";
                     var reader = cmd.ExecuteReader();
 
                     var users = new List<User>();
@@ -37,6 +37,31 @@ namespace BountyfulSushi.Repositories
                     reader.Close();
 
                     return users;
+                }
+            }
+        }
+
+        public List<UserType> GetUserTypes()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT Id, Name
+                        FROM UserType;";
+                    var reader = cmd.ExecuteReader();
+
+                    var userTypes = new List<UserType>();
+
+                    while (reader.Read())
+                    {
+                        userTypes.Add(MakeUserType(reader));
+                    }
+                    reader.Close();
+
+                    return userTypes;
                 }
             }
         }
@@ -179,6 +204,15 @@ namespace BountyfulSushi.Repositories
                     Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
                 },
                 Bounties = new List<Bounty>()
+            };
+        }
+
+        public UserType MakeUserType(SqlDataReader reader)
+        {
+            return new UserType()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                Name = reader.GetString(reader.GetOrdinal("Name"))
             };
         }
     }
