@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Table } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllUsers } from "../../modules/UserManager";
+import UserBountyLockPopup from "./UserLockPopup";
 
 const UserList = ({ userProfile }) => {
     const [users, setUsers] = useState([]);
@@ -56,13 +57,14 @@ const UserList = ({ userProfile }) => {
                                     <Link to={`edit/${user.id}`}>
                                         <Button color="primary">Edit</Button>
                                     </Link>
-                                    <Button color="danger" className="ms-2">Lock</Button>
+                                    {user.userType.id !== 1 ? <Button color="danger" className="ms-2" onClick={e => handleLockPopup(user)}>Lock</Button> : ""}
                                 </td>
                             </tr>
                         );
                     })}
                 </tbody>
             </Table>
+            <UserBountyLockPopup popup={popup} togglePopup={togglePopup} />
         </div>
     );
 };
