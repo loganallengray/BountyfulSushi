@@ -47,12 +47,12 @@ const UserList = ({ userProfile }) => {
                     {users.map((user) => {
                         return (
                             <tr key={user.id}>
-                                <td>
+                                <td className="align-middle">
                                     <Link to={`${user.id}`}>
                                         {user.name}
                                     </Link>
                                 </td>
-                                <td>{user.userType.name}</td>
+                                <td className="align-middle">{user.userType.name}</td>
                                 <td className="text-end">
                                     <Link to={`edit/${user.id}`}>
                                         <Button color="primary">Edit</Button>

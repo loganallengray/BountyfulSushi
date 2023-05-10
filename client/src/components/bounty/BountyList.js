@@ -16,6 +16,10 @@ const BountyList = ({ userProfile }) => {
         getAllBounties().then(bounties => setBounties(bounties));
     };
 
+    useEffect(() => {
+        getBounties();
+    }, []);
+
     const handleDeletePopup = (bounty) => {
         setPopup({ show: true, bounty: bounty })
     }
@@ -28,9 +32,9 @@ const BountyList = ({ userProfile }) => {
         setPopup(copy);
     }
 
-    useEffect(() => {
+    const afterDelete = () => {
         getBounties();
-    }, []);
+    }
 
     return (
         <>
@@ -45,7 +49,7 @@ const BountyList = ({ userProfile }) => {
                     {bounties.map((bounty) => (
                         <Bounty bounty={bounty} key={bounty.id} userProfile={userProfile} handleDeletePopup={handleDeletePopup} />
                     ))}
-                    <BountyDeletePopup popup={popup} togglePopup={togglePopup} getBounties={getBounties} />
+                    <BountyDeletePopup popup={popup} togglePopup={togglePopup} afterDelete={afterDelete} />
                 </div>
             </div>
         </>

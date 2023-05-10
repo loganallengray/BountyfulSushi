@@ -24,7 +24,7 @@ export const getUserBounties = (userId) => {
     })
 };
 
-export const getBounty = (id) => {
+export const getBountyById = (id) => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}/${id}`, {
             method: "GET",
@@ -35,7 +35,7 @@ export const getBounty = (id) => {
     })
 };
 
-export const getUserBounty = (userBounty) => {
+export const getUserBountyById = (userBounty) => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}/${userBounty.userId}/${userBounty.bountyId}`, {
             method: "GET",

@@ -1,19 +1,13 @@
 import { Modal, ModalBody, Button, ModalHeader, ModalFooter } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { deleteUserBounty } from "../../modules/BountyManager";
+import { deleteUserBounty } from "../../../modules/BountyManager";
 
-const UserBountyRemovePopup = ({ popup, togglePopup, getBounties }) => {
+const UserBountyRemovePopup = ({ popup, togglePopup, afterRemove }) => {
     const navigate = useNavigate();
 
     const handleRemove = () => {
         deleteUserBounty(popup.userBounty)
-            .then(e => {
-                if (getBounties === undefined || getBounties === null) {
-                    navigate(`../user/${popup.userBounty.userId}`)
-                } else {
-                    getBounties()
-                }
-            })
+            .then(e => afterRemove())
             .then(e => togglePopup());
     }
 
