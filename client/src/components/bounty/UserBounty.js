@@ -4,7 +4,7 @@ import { Button, Card, CardBody } from "reactstrap";
 
 const UserBounty = ({ bounty, userId, handleRemovePopup }) => {
     return (
-        <Card className="mb-3 p-2">
+        <Card className={typeof bounty.dateCompleted === "string" ? "mb-3 p-2 complete-bounties" : "mb-3 p-2"}>
             <CardBody>
                 <div className="d-flex justify-content-between">
                     <div>
@@ -18,9 +18,9 @@ const UserBounty = ({ bounty, userId, handleRemovePopup }) => {
                             <div>{bounty?.difficulty?.name}</div>
                             <div>{bounty.location}</div>
                         </div>
-                        <div className="d-flex align-items-center justify-content-center ms-3">
+                        {bounty.dateCompleted === null ? <div className="d-flex align-items-center justify-content-center ms-3">
                             <Button color="danger" className="ms-2" onClick={e => handleRemovePopup(bounty)}>X</Button>
-                        </div>
+                        </div> : ""}
                     </div>
                 </div>
             </CardBody>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getBounty } from "../../modules/BountyManager";
+import { getBounty, getUserBounty } from "../../modules/BountyManager";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button } from "reactstrap";
 import UserBountyRemovePopup from "./UserBountyRemovePopup";
@@ -22,7 +22,7 @@ const UserBountyDetails = ({ userProfile }) => {
         if (/\d+/.test(id)) {
             const userBounty = { userId: userId, bountyId: id }
 
-            getBounty(userBounty).then(bounty => setBounty(bounty));
+            getUserBounty(userBounty).then(bounty => setBounty(bounty));
         }
     }
 
@@ -46,7 +46,7 @@ const UserBountyDetails = ({ userProfile }) => {
 
     return (
         <div className="container mt-3 mb-1">
-            <Card className="mb-3 p-4">
+            <Card className={typeof bounty.dateCompleted === "string" ? "mb-3 p-4 complete-bounties" : "mb-3 p-4"}>
                 <div className="d-flex justify-content-between">
                     <Link to={`../user/${userId}`} className="w-25">
                         <strong>{"<< Back"}</strong>
@@ -69,10 +69,10 @@ const UserBountyDetails = ({ userProfile }) => {
                             <div>{bounty.location}</div>
                         </div>
                     </div>
-                    <div className="text-center mt-2">
+                    {bounty.dateCompleted === null ? <div className="text-center mt-2">
                         <Label for='remove' className="d-block">Remove Bounty?</Label>
                         <Button color="danger" onClick={e => handleRemovePopup(bounty)}>Remove</Button>
-                    </div>
+                    </div> : ""}
                 </CardBody>
             </Card>
             <UserBountyRemovePopup popup={popup} togglePopup={togglePopup} />

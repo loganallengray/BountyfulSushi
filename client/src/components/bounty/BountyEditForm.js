@@ -4,7 +4,7 @@ import { Card, CardBody, Form, FormGroup, Label, Button, Input, Dropdown, Dropdo
 import { getAllDifficulties } from "../../modules/DifficultyManager";
 import { editBounty, getBounty } from "../../modules/BountyManager";
 
-const BountyEditForm = () => {
+const BountyEditForm = ({ userProfile }) => {
     const [difficulties, setDifficulties] = useState([]);
     const [showDropdown, setShowDropdown] = useState(false);
     const [bounty, setBounty] = useState({
@@ -19,10 +19,12 @@ const BountyEditForm = () => {
 
     const toggleDropdown = () => setShowDropdown((prevState) => !prevState);
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { id, userId } = useParams();
 
     useEffect(() => {
-        getBounty(id).then(bounty => setBounty(bounty));
+        const userBounty = { userId: userProfile.id, bountyId: id }
+
+        getBounty(userBounty).then(bounty => setBounty(bounty));
         getAllDifficulties().then(difficulties => setDifficulties(difficulties));
     }, []);
 

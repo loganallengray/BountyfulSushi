@@ -29,6 +29,12 @@ textarea:focus {
   border: 1px solid #ced4da;
 }
 
+/* Bounty List CSS */
+
+.complete-bounties {
+  background-color: #CEFFC8 !important;
+}
+
 /* Previous Code */
 
 /* .App {
