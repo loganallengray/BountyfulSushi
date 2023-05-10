@@ -52,7 +52,7 @@ const UserBountyDetails = ({ userProfile }) => {
     return (
         <>
             <div className="container mt-3 mb-1">
-                <Link to={`..`}>
+                <Link to={`../user/${userProfile.id}`}>
                     <strong>{"<< Back"}</strong>
                 </Link>
                 <div className="d-flex justify-content-between align-items-center">
