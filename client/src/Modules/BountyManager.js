@@ -13,9 +13,9 @@ export const getAllBounties = () => {
     })
 };
 
-export const getUserBounties = (userid) => {
+export const getUserBounties = (userId) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/user/${userid}`, {
+        return fetch(`${baseUrl}/user/${userId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,

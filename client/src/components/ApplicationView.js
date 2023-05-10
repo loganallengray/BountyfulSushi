@@ -10,6 +10,8 @@ import BountyEditForm from "./bounty/BountyEditForm";
 import UserBountyList from "./bounty/UserBountyList";
 import NotFound from "./NotFound";
 import UserBountyDetails from "./bounty/UserBountyDetails";
+import UserList from "./user/UserList";
+import UserDetails from "./user/UserDetails";
 
 const ApplicationView = ({ isLoggedIn, userProfile }) => {
     if (userProfile?.userType?.id === 1) {
@@ -25,9 +27,10 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                         <Route path="user/:userId" element={isLoggedIn ? <UserBountyList userProfile={userProfile} /> : <Navigate to="/login" />} />
                         <Route path="user/:userId/:id" element={isLoggedIn ? <UserBountyDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
                     </Route>
-                    {/* <Route path="users">
-                        <Route path=":id" element={isLoggedIn ? <UserVideos /> : <Navigate to="/login" />} />
-                    </Route> */}
+                    <Route path="users">
+                        <Route index element={isLoggedIn ? <UserList userProfile={userProfile} /> : <Navigate to="/login" />} />
+                        <Route path=":id" element={isLoggedIn ? <UserDetails /> : <Navigate to="/login" />} />
+                    </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
