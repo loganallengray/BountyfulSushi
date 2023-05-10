@@ -3,6 +3,7 @@ using BountyfulSushi.Models;
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Tabloid.Utils;
 
@@ -81,7 +82,7 @@ namespace BountyfulSushi.Repositories
                             u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE FireBaseId = @FireBaseId";
+                        WHERE FireBaseId = @FireBaseId && u.Locked != 1";
 
                     DbUtils.AddParameter(cmd, "@FireBaseId", fireBaseId);
 
@@ -220,6 +221,37 @@ namespace BountyfulSushi.Repositories
                     cmd.Parameters.AddWithValue("@Email", DbUtils.ValueOrDBNull(user.Email));
                     cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(user.ImageLocation));
                     cmd.Parameters.AddWithValue("@UserTypeId", DbUtils.ValueOrDBNull(user.UserType.Id));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void ToggleLock(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        IF EXISTS (
+		                        SELECT * FROM [User] u2
+		                        WHERE u2.id = 6 AND u2.locked = 0
+	                        )
+	                        BEGIN
+		                        UPDATE [User]
+                                    SET Locked = 1
+                                WHERE Id = @Id
+	                        END
+                        ELSE
+	                        BEGIN
+		                        UPDATE [User]
+                                    SET Locked = 0
+                                WHERE Id = @Id
+	                        END";
+
+                    cmd.Parameters.AddWithValue("@Id", id);
 
                     cmd.ExecuteNonQuery();
                 }

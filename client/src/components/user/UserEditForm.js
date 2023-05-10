@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button, Input, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from "reactstrap";
-import { editUser, getUser, getUserTypes } from "../../modules/UserManager";
+import { editUser, getUser, getUserById, getUserTypes } from "../../modules/UserManager";
 
 const UserEditForm = ({ userProfile }) => {
     const [userTypes, setUserTypes] = useState([]);
@@ -23,7 +23,7 @@ const UserEditForm = ({ userProfile }) => {
     const { id } = useParams();
 
     useEffect(() => {
-        getUser(id).then(user => setUser(user));
+        getUserById(id).then(user => setUser(user));
         getUserTypes().then(userTypes => setUserTypes(userTypes));
     }, []);
 

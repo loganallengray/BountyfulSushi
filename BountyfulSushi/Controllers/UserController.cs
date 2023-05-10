@@ -102,6 +102,20 @@ namespace BountyfulSushi.Controllers
             return NoContent();
         }
 
+        [HttpPut("togglelock/{id}")]
+        public IActionResult ToggleLock(int id)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
+            _userRepository.ToggleLock(id);
+            return NoContent();
+        }
+
 
         [HttpGet("Me")]
         public IActionResult Me()

@@ -22,7 +22,7 @@ export const getAllUsers = () => {
     })
 };
 
-export const getUser = (id) => {
+export const getUserById = (id) => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}/details/${id}`, {
             method: "GET",
@@ -53,6 +53,18 @@ export const editUser = (user) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(user)
+        });
+    })
+};
+
+export const toggleLock = (id) => {
+    return getToken().then((token) => {
+        return fetch(`${baseUrl}/togglelock/${id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
         });
     })
 };

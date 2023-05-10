@@ -3,12 +3,14 @@ import { Button, Table } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllUsers } from "../../modules/UserManager";
 import UserBountyLockPopup from "./UserLockPopup";
+import UserLockLogic from "./UserLockLogic";
 
 const UserList = ({ userProfile }) => {
     const [users, setUsers] = useState([]);
     const [popup, setPopup] = useState({
         show: false,
-        user: {}
+        user: {},
+        lock: false
     });
 
     const navigate = useNavigate();
@@ -17,8 +19,12 @@ const UserList = ({ userProfile }) => {
         getAllUsers().then(users => setUsers(users));
     };
 
-    const handleLockPopup = (user) => {
-        setPopup({ show: true, user: user })
+    useEffect(() => {
+        getUsers();
+    }, []);
+
+    const handleLockPopup = (user, locked) => {
+        setPopup({ show: true, user: user, locked: locked })
     }
 
     const togglePopup = () => {
@@ -29,9 +35,9 @@ const UserList = ({ userProfile }) => {
         setPopup(copy);
     }
 
-    useEffect(() => {
+    const afterToggleLock = () => {
         getUsers();
-    }, []);
+    }
 
     return (
         <div className="container mt-3 mb-1">
@@ -63,14 +69,14 @@ const UserList = ({ userProfile }) => {
                                     <Link to={`edit/${user.id}`}>
                                         <Button color="primary">Edit</Button>
                                     </Link>
-                                    {user.userType.id !== 1 ? <Button color="danger" className="ms-2" onClick={e => handleLockPopup(user)}>Lock</Button> : ""}
+                                    {user.userType.id !== 1 ? <UserLockLogic user={user} handleLockPopup={handleLockPopup} /> : ""}
                                 </td>
                             </tr>
                         );
                     })}
                 </tbody>
             </Table>
-            <UserBountyLockPopup popup={popup} togglePopup={togglePopup} />
+            <UserBountyLockPopup popup={popup} togglePopup={togglePopup} afterToggleLock={afterToggleLock} />
         </div>
     );
 };

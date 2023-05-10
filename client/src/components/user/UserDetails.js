@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import NotFound from "../NotFound";
-import { getUser } from "../../modules/UserManager";
 import { getUserBounties } from "../../modules/BountyManager";
 import UserBountyLockPopup from "./UserLockPopup";
 import { Button } from "reactstrap";
+import UserLockLogic from "./UserLockLogic";
+import { getUserById } from "../../modules/UserManager";
 
 const UserDetails = () => {
     const [user, setUser] = useState({});
@@ -16,15 +17,19 @@ const UserDetails = () => {
 
     const { id } = useParams();
 
+    const getUser = () => {
+        getUserById(id).then(user => setUser(user));
+    }
+
     useEffect(() => {
         if (/\d+/.test(id)) {
-            getUser(id).then(user => setUser(user));
+            getUser();
             getUserBounties(id).then(userBounties => setUserBounties(userBounties));
         }
     }, []);
 
-    const handleLockPopup = (user) => {
-        setPopup({ show: true, user: user })
+    const handleLockPopup = (user, locked) => {
+        setPopup({ show: true, user: user, locked: locked })
     }
 
     const togglePopup = () => {
@@ -33,6 +38,10 @@ const UserDetails = () => {
         copy.show = !popup.show;
 
         setPopup(copy);
+    }
+
+    const afterToggleLock = () => {
+        getUser();
     }
 
     if (/\d+/.test(id)) {
@@ -53,22 +62,22 @@ const UserDetails = () => {
                             <Link to={`../edit/${user.id}`}>
                                 <Button color="primary">Edit</Button>
                             </Link>
-                            {user?.userType?.id !== 1 ? <Button color="danger" className="ms-2" onClick={e => handleLockPopup(user)}>Lock</Button> : ""}
+                            {user?.userType?.id !== 1 ? <UserLockLogic user={user} handleLockPopup={handleLockPopup} /> : ""}
                         </div>
                     </div>
                     <div>
                         <div>{user.email}</div>
                         <div>{user.firstName} {user.lastName}</div>
                     </div>
-                    <div>
+                    {/* <div>
                         {userBounties.length !== 0 ? userBounties.map(bounty => (
                             <div>
                                 {bounty.name}
                             </div>
                         )) : ""}
-                    </div>
+                    </div> */}
                 </div>
-                <UserBountyLockPopup popup={popup} togglePopup={togglePopup} />
+                <UserBountyLockPopup popup={popup} togglePopup={togglePopup} afterToggleLock={afterToggleLock} />
             </>
         )
     } else {

@@ -1,40 +1,54 @@
 import { Modal, ModalBody, Button, ModalHeader, ModalFooter } from "reactstrap";
-import { useNavigate } from "react-router-dom";
+import { toggleLock } from "../../modules/UserManager";
 
-const UserBountyLockPopup = ({ popup, togglePopup }) => {
-    const navigate = useNavigate();
-
+const UserBountyLockPopup = ({ popup, togglePopup, afterToggleLock }) => {
     const handleLock = () => {
-        // deleteUserBounty(popup.userBounty)
-        //     .then(e => {
-        //         if (getBounties === undefined || getBounties === null) {
-        //             navigate(`../user/${popup.userBounty.userId}`)
-        //         } else {
-        //             getBounties()
-        //         }
-        //     })
-        //     .then(e => togglePopup());
+        toggleLock(popup.user.id)
+            .then(e => afterToggleLock())
+            .then(e => togglePopup())
     }
 
-    return (
-        <Modal isOpen={popup.show} toggle={togglePopup}>
-            <ModalHeader>
-                Lock User's Account?
-            </ModalHeader>
-            <ModalBody>
-                <p>
-                    {popup?.user?.userName}
-                </p>
-                <p className="mb-1">
-                    {popup?.user?.email}
-                </p>
-            </ModalBody>
-            <ModalFooter className="text-center">
-                <Button color="danger" onClick={e => handleLock()}>Confirm</Button>
-                <Button color="primary" onClick={e => togglePopup()}>Cancel</Button>
-            </ModalFooter>
-        </Modal>
-    );
+    if (popup.locked) {
+        return (
+            <Modal isOpen={popup.show} toggle={togglePopup}>
+                <ModalHeader>
+                    Unlock User's Account?
+                </ModalHeader>
+                <ModalBody>
+                    <p>
+                        {popup?.user?.userName}
+                    </p>
+                    <p className="mb-1">
+                        {popup?.user?.email}
+                    </p>
+                </ModalBody>
+                <ModalFooter className="text-center">
+                    <Button color="success" onClick={e => handleLock()}>Confirm</Button>
+                    <Button color="primary" onClick={e => togglePopup()}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        );
+    } else {
+        return (
+            <Modal isOpen={popup.show} toggle={togglePopup}>
+                <ModalHeader>
+                    Lock User's Account?
+                </ModalHeader>
+                <ModalBody>
+                    <p>
+                        {popup?.user?.userName}
+                    </p>
+                    <p className="mb-1">
+                        {popup?.user?.email}
+                    </p>
+                </ModalBody>
+                <ModalFooter className="text-center">
+                    <Button color="danger" onClick={e => handleLock()}>Confirm</Button>
+                    <Button color="primary" onClick={e => togglePopup()}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        );
+    }
 }
 
 export default UserBountyLockPopup;
