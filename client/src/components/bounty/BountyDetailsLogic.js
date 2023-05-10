@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { addUserBounty, deleteUserBounty, getBounty } from "../../modules/BountyManager";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { Card, CardBody, Form, FormGroup, Label, Button, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
-import NotFound from "../NotFound";
+import React, { useState } from "react";
+import { addUserBounty } from "../../modules/BountyManager";
+import { useNavigate } from "react-router-dom";
+import { Form, Label, Button } from "reactstrap";
 import UserBountyCompletePopup from "./BountyCompletePopup";
 
 const BountyDetailsLogic = ({ bounty, userProfile }) => {
@@ -14,8 +13,6 @@ const BountyDetailsLogic = ({ bounty, userProfile }) => {
     const navigate = useNavigate();
 
     const handleAccept = (e) => {
-        e.preventDefault();
-
         const userBounty = {
             userId: userProfile.id,
             bountyId: bounty.id
@@ -37,14 +34,14 @@ const BountyDetailsLogic = ({ bounty, userProfile }) => {
         setPopup({ show: true, bounty: bounty })
     }
 
-    if (userProfile?.userType?.id !== 1) {
+    if (userProfile?.userType?.id !== 1 && bounty?.users?.find(user => user?.id === userProfile?.id) === undefined) {
         return (
-            <Form onSubmit={(e) => handleAccept(e)} className="text-center mt-2">
+            <div className="text-center mt-2">
                 <Label for='accept' className="d-block">Accept Bounty?</Label>
-                <Button color="success">Accept</Button>
-            </Form>
+                <Button color="success" onClick={e => handleAccept()}>Accept</Button>
+            </div>
         );
-    } else if (bounty.dateCompleted === null && bounty.users.length !== 0) {
+    } else if (userProfile?.userType?.id === 1 && bounty.dateCompleted === null && bounty.users.length !== 0) {
         return (
             <>
                 <div className="text-center mt-2">

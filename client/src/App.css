@@ -35,6 +35,13 @@ textarea:focus {
   background-color: #CEFFC8 !important;
 }
 
+/* Rounded PFP Images */
+
+.rounded-images {
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 /* Previous Code */
 
 /* .App {

@@ -1,9 +1,29 @@
-﻿CREATE TABLE [User] (
+﻿USE [master]
+
+IF db_id('BountyfulSushi') IS NULl
+  CREATE DATABASE [BountyfulSushi]
+GO
+
+USE [BountyfulSushi]
+GO
+
+
+DROP TABLE IF EXISTS [User];
+DROP TABLE IF EXISTS [UserType];
+DROP TABLE IF EXISTS [Bounty];
+DROP TABLE IF EXISTS [Difficulty];
+DROP TABLE IF EXISTS [UserBounty];
+GO
+
+CREATE TABLE [User] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
   [FirebaseId] varchar(28) NOT NULL,
-  [Name] varchar(50) NOT NULL,
-  [Email] varchar(50) NOT NULL,
-  [ImageLocation] nvarchar(255),
+  [UserName] varchar(50) NOT NULL,
+  [FirstName] varchar(50) NOT NULL,
+  [LastName] varchar(50) NOT NULL,
+  [Email] varchar(100) NOT NULL,
+  [Locked] bit NOT NULL,
+  [ImageLocation] nvarchar(255) NOT NULL,
   [UserTypeId] int NOT NULL
 )
 GO
@@ -22,6 +42,7 @@ CREATE TABLE [Bounty] (
   [Location] nvarchar(255),
   [Notes] nvarchar(255),
   [DateCompleted] datetime,
+  [ImageLocation] nvarchar(255) NOT NULL,
   [DifficultyId] int NOT NULL
 )
 GO

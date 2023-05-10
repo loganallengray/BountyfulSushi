@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Label, Button, Input, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from "reactstrap";
 import { getAllDifficulties } from "../../modules/DifficultyManager";
-import { editBounty, getBounty } from "../../modules/BountyManager";
+import { editBounty, getBountyById } from "../../modules/BountyManager";
 
 const BountyEditForm = ({ userProfile }) => {
     const [difficulties, setDifficulties] = useState([]);
@@ -19,12 +19,10 @@ const BountyEditForm = ({ userProfile }) => {
 
     const toggleDropdown = () => setShowDropdown((prevState) => !prevState);
     const navigate = useNavigate();
-    const { id, userId } = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
-        const userBounty = { userId: userProfile.id, bountyId: id }
-
-        getBounty(userBounty).then(bounty => setBounty(bounty));
+        getBountyById(id).then(bounty => setBounty(bounty));
         getAllDifficulties().then(difficulties => setDifficulties(difficulties));
     }, []);
 

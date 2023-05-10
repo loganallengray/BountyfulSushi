@@ -3,6 +3,7 @@ using BountyfulSushi.Models;
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Tabloid.Utils;
 
@@ -20,12 +21,13 @@ namespace BountyfulSushi.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.FireBaseId, u.[Name], u.Email,
-                            u.ImageLocation, u.UserTypeId,
-                            ut.[Name] AS UserTypeName
+                        SELECT u.Id, u.FireBaseId, u.UserName, 
+                            u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation, u.Locked,
+                            u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
-                            LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        ORDER BY u.[Name]";
+                            LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
+                        ORDER BY ut.Id, u.UserName;";
                     var reader = cmd.ExecuteReader();
 
                     var users = new List<User>();
@@ -41,6 +43,31 @@ namespace BountyfulSushi.Repositories
             }
         }
 
+        public List<UserType> GetUserTypes()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT Id, Name
+                        FROM UserType;";
+                    var reader = cmd.ExecuteReader();
+
+                    var userTypes = new List<UserType>();
+
+                    while (reader.Read())
+                    {
+                        userTypes.Add(MakeUserType(reader));
+                    }
+                    reader.Close();
+
+                    return userTypes;
+                }
+            }
+        }
+
         public User GetByFireBaseId(string fireBaseId)
         {
             using (var conn = Connection)
@@ -49,12 +76,13 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.FireBaseId, u.[Name], u.Email,
-                            u.ImageLocation, u.UserTypeId,
-                            ut.[Name] AS UserTypeName
+                        SELECT u.Id, u.FireBaseId, u.UserName, 
+                            u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation, u.Locked,
+                            u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE FireBaseId = @FireBaseId";
+                        WHERE FireBaseId = @FireBaseId && u.Locked != 1";
 
                     DbUtils.AddParameter(cmd, "@FireBaseId", fireBaseId);
 
@@ -80,13 +108,14 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT u.Id, u.FireBaseId, u.[Name], u.Email,
-                            u.ImageLocation, u.UserTypeId,
-                            ut.[Name] AS UserTypeName,
+                        SELECT u.Id, u.FireBaseId, u.UserName, 
+                            u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation, u.Locked,
+                            u.UserTypeId, ut.[Name] AS UserTypeName,
                             ub.BountyId, b.[Name] AS BountyName,
                             b.[Description] AS BountyDescription,
                             b.Species, b.Location, b.Notes,
-                            b.DateCompleted, b.DifficultyId, 
+                            b.DateCompleted, b.ImageLocation, b.DifficultyId, 
                             d.[Name] as DifficultyName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
@@ -118,6 +147,7 @@ namespace BountyfulSushi.Repositories
                                 Species = reader.GetString(reader.GetOrdinal("Species")),
                                 Location = reader.GetString(reader.GetOrdinal("Location")),
                                 Notes = reader.GetString(reader.GetOrdinal("Notes")),
+                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
                                 Difficulty = new Difficulty()
                                 {
                                     Id = reader.GetInt32(reader.GetOrdinal("DifficultyId")),
@@ -149,17 +179,81 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO User (FireBaseId, [Name], Email, ImageLocation, UserTypeId)
+                        INSERT INTO [User] (FireBaseId, UserName, FirstName, LastName, Email, ImageLocation, Locked, UserTypeId)
                         OUTPUT INSERTED.ID
-                        VALUES (@FireBaseId, @Name, @Email, @ImageLocation, @UserTypeId)";
+                        VALUES (@FireBaseId, @UserName, @FirstName, @LastName, @Email, @ImageLocation, @Locked, @UserTypeId)";
 
                     DbUtils.AddParameter(cmd, "@FireBaseId", user.FireBaseId);
-                    DbUtils.AddParameter(cmd, "@Name", user.Name);
+                    DbUtils.AddParameter(cmd, "@UserName", user.UserName);
+                    DbUtils.AddParameter(cmd, "@FirstName", user.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", user.LastName);
                     DbUtils.AddParameter(cmd, "@Email", user.Email);
                     DbUtils.AddParameter(cmd, "@ImageLocation", user.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@Locked", user.Locked);
                     DbUtils.AddParameter(cmd, "@UserTypeId", user.UserType.Id);
 
                     user.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        public void Update(User user)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [User]
+                            SET UserName = @UserName,
+                                FirstName = @FirstName, 
+                                LastName = @LastName,
+                                Email = @Email,
+                                ImageLocation = @ImageLocation,
+                                UserTypeId = @UserTypeId
+                         WHERE Id = @Id";
+
+                    cmd.Parameters.AddWithValue("@Id", user.Id);
+                    cmd.Parameters.AddWithValue("@UserName", user.UserName);
+                    cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", DbUtils.ValueOrDBNull(user.LastName));
+                    cmd.Parameters.AddWithValue("@Email", DbUtils.ValueOrDBNull(user.Email));
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(user.ImageLocation));
+                    cmd.Parameters.AddWithValue("@UserTypeId", DbUtils.ValueOrDBNull(user.UserType.Id));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void ToggleLock(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        IF EXISTS (
+		                        SELECT * FROM [User] u2
+		                        WHERE u2.id = 6 AND u2.locked = 0
+	                        )
+	                        BEGIN
+		                        UPDATE [User]
+                                    SET Locked = 1
+                                WHERE Id = @Id
+	                        END
+                        ELSE
+	                        BEGIN
+		                        UPDATE [User]
+                                    SET Locked = 0
+                                WHERE Id = @Id
+	                        END";
+
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -170,8 +264,11 @@ namespace BountyfulSushi.Repositories
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                 FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseId")),
-                Name = reader.GetString(reader.GetOrdinal("Name")),
+                UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                LastName = reader.GetString(reader.GetOrdinal("LastName")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
+                Locked = reader.GetBoolean(reader.GetOrdinal("Locked")),
                 ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                 UserType = new UserType()
                 {
@@ -179,6 +276,15 @@ namespace BountyfulSushi.Repositories
                     Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
                 },
                 Bounties = new List<Bounty>()
+            };
+        }
+
+        public UserType MakeUserType(SqlDataReader reader)
+        {
+            return new UserType()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                Name = reader.GetString(reader.GetOrdinal("Name"))
             };
         }
     }

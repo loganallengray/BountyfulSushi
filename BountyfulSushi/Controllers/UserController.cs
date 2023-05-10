@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using BountyfulSushi.Repositories;
 
 namespace BountyfulSushi.Controllers
 {
@@ -30,6 +31,19 @@ namespace BountyfulSushi.Controllers
             }
 
             return Ok(_userRepository.GetAll());
+        }
+
+        [HttpGet("usertypes")]
+        public IActionResult GetUserTypes()
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_userRepository.GetUserTypes());
         }
 
         [HttpGet("{fireBaseId}")]
@@ -60,6 +74,23 @@ namespace BountyfulSushi.Controllers
         [HttpPost]
         public IActionResult Post(User user)
         {
+            user.UserType = new UserType()
+            {
+                Id = 2,
+                Name = "User"
+            };
+            user.Locked = false;
+
+            _userRepository.Add(user);
+            return CreatedAtAction(
+                nameof(GetUser),
+                new { fireBaseId = user.FireBaseId },
+                user);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(User user)
+        {
             var currentUser = GetCurrentUser();
 
             if (currentUser.UserType.Id != 1)
@@ -67,12 +98,22 @@ namespace BountyfulSushi.Controllers
                 return Unauthorized();
             }
 
-            user.UserType.Id = 2;
-            _userRepository.Add(user);
-            return CreatedAtAction(
-                nameof(GetUser),
-                new { fireBaseId = user.FireBaseId },
-                user);
+            _userRepository.Update(user);
+            return NoContent();
+        }
+
+        [HttpPut("togglelock/{id}")]
+        public IActionResult ToggleLock(int id)
+        {
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id != 1)
+            {
+                return Unauthorized();
+            }
+
+            _userRepository.ToggleLock(id);
+            return NoContent();
         }
 
 

@@ -1,10 +1,10 @@
 import { Modal, ModalBody, Button, ModalHeader, ModalFooter } from "reactstrap";
 import { deleteBounty } from "../../modules/BountyManager";
 
-const BountyDeletePopup = ({ popup, togglePopup, getBounties }) => {
+const BountyDeletePopup = ({ popup, togglePopup, afterDelete }) => {
     const handleDelete = () => {
         deleteBounty(popup.bounty.id)
-            .then(e => getBounties())
+            .then(e => afterDelete())
             .then(e => togglePopup());
     }
 

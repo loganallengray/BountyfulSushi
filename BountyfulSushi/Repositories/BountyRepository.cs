@@ -23,6 +23,7 @@ namespace BountyfulSushi.Repositories
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
+                            b.ImageLocation,
 	                        d.[Name] AS DifficultyName
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
@@ -53,22 +54,11 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
-	                        b.DateCompleted, b.DifficultyId,
-	                        d.[Name] AS DifficultyName, 
-	                        ub.UserId AS UBUserId, ub.BountyId AS UBBountyId
+	                        b.DateCompleted, b.ImageLocation, 
+                            b.DifficultyId, d.[Name] AS DifficultyName
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
-	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
-                        WHERE b.DateCompleted IS NULL AND 
-	                        NOT EXISTS (
-		                        SELECT *
-		                        FROM UserBounty ub2
-		                        WHERE ub2.BountyId = ub.BountyId AND ub2.UserId = @userId OR ub2.UserId IS NULL
-	                        )
-                        GROUP BY b.Id, b.[Name], b.[Description],
-	                        b.Species, b.[Location], b.Notes,
-	                        b.DateCompleted, b.DifficultyId,
-	                        d.[Name], ub.UserId, ub.BountyId;";
+                        WHERE b.DateCompleted IS NULL";
                     cmd.Parameters.AddWithValue("@userId", userId);
 
                     var reader = cmd.ExecuteReader();
@@ -98,10 +88,11 @@ namespace BountyfulSushi.Repositories
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
+                            b.ImageLocation,
 	                        d.[Name] AS DifficultyName,
-	                        ub.UserId, u.FireBaseId, 
-	                        u.[Name] AS UserName, u.Email,
-                            u.ImageLocation AS UserImageLocation, 
+	                        ub.UserId, u.FireBaseId, u.UserName, 
+	                        u.FirstName, u.LastName, u.Email,
+                            u.ImageLocation AS UserImageLocation, u.Locked, 
 	                        u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
@@ -128,9 +119,12 @@ namespace BountyfulSushi.Repositories
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("UserId")),
                                 FireBaseId = reader.GetString(reader.GetOrdinal("FirebaseId")),
-                                Name = reader.GetString(reader.GetOrdinal("UserName")),
+                                UserName = reader.GetString(reader.GetOrdinal("UserName")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
                                 Email = reader.GetString(reader.GetOrdinal("Email")),
                                 ImageLocation = DbUtils.GetNullableString(reader, "UserImageLocation"),
+                                Locked = reader.GetBoolean(reader.GetOrdinal("Locked")),
                                 UserType = new UserType()
                                 {
                                     Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
@@ -159,6 +153,7 @@ namespace BountyfulSushi.Repositories
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
+                            b.ImageLocation,
 	                        d.[Name] AS DifficultyName,
 	                        ub.UserId
                         FROM Bounty b
@@ -172,9 +167,21 @@ namespace BountyfulSushi.Repositories
 
                     Bounty bounty = null;
 
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        bounty = MakeBounty(reader);
+                        if (bounty == null)
+                        {
+                            bounty = MakeBounty(reader);
+                        }
+
+                        if (DbUtils.IsNotDbNull(reader, "UserId"))
+                        {
+                            bounty.Users.Add(new User()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("UserId"))
+                            });
+
+                        }
                     }
 
                     reader.Close();
@@ -195,6 +202,7 @@ namespace BountyfulSushi.Repositories
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
+                            b.ImageLocation,
 	                        d.[Name] AS DifficultyName,
 	                        ub.UserId
                         FROM Bounty b
@@ -232,6 +240,7 @@ namespace BountyfulSushi.Repositories
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
+                            b.ImageLocation,
 	                        d.[Name] AS DifficultyName
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
@@ -265,14 +274,15 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Bounty ( [Name], [Description], Species, [Location], Notes, DifficultyId )
+                        INSERT INTO Bounty ( [Name], [Description], Species, [Location], Notes, ImageLocation, Locked, DifficultyId )
                         OUTPUT INSERTED.ID
-                        VALUES ( @Name, @Description, @Species, @Location, @Notes, @DifficultyId )";
+                        VALUES ( @Name, @Description, @Species, @Location, @Notes, @ImageLocation, @Locked, @DifficultyId )";
                     cmd.Parameters.AddWithValue("@Name", bounty.Name);
                     cmd.Parameters.AddWithValue("@Description", bounty.Description);
                     cmd.Parameters.AddWithValue("@Species", DbUtils.ValueOrDBNull(bounty.Species));
                     cmd.Parameters.AddWithValue("@Location", DbUtils.ValueOrDBNull(bounty.Location));
                     cmd.Parameters.AddWithValue("@Notes", DbUtils.ValueOrDBNull(bounty.Notes));
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(bounty.ImageLocation));
                     cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.DifficultyId));
 
                     bounty.Id = (int)cmd.ExecuteScalar();
@@ -358,6 +368,7 @@ namespace BountyfulSushi.Repositories
                                 Species = @Species,
                                 [Location] = @Location,
                                 Notes = @Notes,
+                                ImageLocation = @ImageLocation,
                                 DifficultyId = @DifficultyId
                          WHERE Id = @Id";
 
@@ -367,6 +378,7 @@ namespace BountyfulSushi.Repositories
                     cmd.Parameters.AddWithValue("@Species", DbUtils.ValueOrDBNull(bounty.Species));
                     cmd.Parameters.AddWithValue("@Location", DbUtils.ValueOrDBNull(bounty.Location));
                     cmd.Parameters.AddWithValue("@Notes", DbUtils.ValueOrDBNull(bounty.Notes));
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(bounty.ImageLocation));
                     cmd.Parameters.AddWithValue("@DifficultyId", DbUtils.ValueOrDBNull(bounty.DifficultyId));
 
                     cmd.ExecuteNonQuery();
@@ -408,6 +420,7 @@ namespace BountyfulSushi.Repositories
                 Species = DbUtils.GetNullableString(reader, "Species"),
                 Location = DbUtils.GetNullableString(reader, "Location"),
                 Notes = DbUtils.GetNullableString(reader, "Notes"),
+                ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                 Difficulty = new Difficulty()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("DifficultyId")),

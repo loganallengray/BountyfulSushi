@@ -42,11 +42,11 @@ const UserBountyCompletePopup = ({ popup, togglePopup }) => {
                         <DropdownMenu>
                             {popup.bounty.users.map((user) => {
                                 return (
-                                    <DropdownItem id="userId" name={user.name} value={user.id} key={user.id}
+                                    <DropdownItem id="userId" name={user.userName} value={user.id} key={user.id}
                                         onClick={(e) => {
                                             handleChange(e);
                                         }}>
-                                        {user.name}
+                                        {user.userName}
                                     </DropdownItem>
                                 );
                             })}
