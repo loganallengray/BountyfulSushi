@@ -25,7 +25,8 @@ namespace BountyfulSushi.Repositories
 	                        b.DateCompleted, b.DifficultyId,
 	                        d.[Name] AS DifficultyName
                         FROM Bounty b
-	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id;";
+	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
+                        ORDER BY (CASE WHEN b.DateCompleted IS NULL THEN 0 ELSE 1 END), b.DateCompleted DESC;";
                     var reader = cmd.ExecuteReader();
 
                     var bounties = new List<Bounty>();
@@ -50,7 +51,7 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT DISTINCT b.Id, b.[Name], b.[Description],
+                        SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
 	                        d.[Name] AS DifficultyName, 
@@ -236,7 +237,8 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
 	                        LEFT JOIN [User] u ON ub.UserId = u.Id
-                        WHERE u.Id = @userId;";
+                        WHERE u.Id = @userId
+                        ORDER BY (CASE WHEN b.DateCompleted IS NULL THEN 0 ELSE 1 END), b.DateCompleted DESC;;";
 
                     cmd.Parameters.AddWithValue("@userId", userId);
                     var reader = cmd.ExecuteReader();
