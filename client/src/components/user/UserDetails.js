@@ -48,6 +48,9 @@ const UserDetails = () => {
         return (
             <>
                 <div className="container mt-3 mb-1">
+                    <Link to={`..`}>
+                        <strong>{"<< Back"}</strong>
+                    </Link>
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex">
                             <div className="d-flex align-items-center me-3">

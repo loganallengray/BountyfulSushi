@@ -1,7 +1,7 @@
 /* Color variables */
 :root {
-  --navy-blue: #253D5B;
-  --gold: #C9A959;
+  --navy-blue: #003061;
+  --gold: #f2c261;
 }
 
 /* Navbar Colors and States */
@@ -28,6 +28,23 @@
 .navbar-custom .navbar-text:focus {
   color: var(--gold);
 }
+
+/* .navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-text:hover {
+  mask-image: linear-gradient(-75deg, rgba(0, 0, 0, .6) 30%, #000 50%, rgba(0, 0, 0, .6) 70%);
+  mask-size: 200%;
+  animation: shine 2s;
+}
+
+@keyframes shine {
+  from {
+    mask-position: 150%;
+  }
+
+  to {
+    mask-position: -50%;
+  }
+} */
 
 /* Form CSS */
 

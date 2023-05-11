@@ -55,7 +55,7 @@ const BountyAddForm = () => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label for='Description'>Description</Label>
+                                <Label for='description'>Description</Label>
                                 <textarea
                                     id="description"
                                     type="text"
@@ -65,7 +65,7 @@ const BountyAddForm = () => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label for='Species'>Species</Label>
+                                <Label for='species'>Species</Label>
                                 <Input
                                     id="species"
                                     type="text"
@@ -74,7 +74,7 @@ const BountyAddForm = () => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label for='Location'>Location</Label>
+                                <Label for='location'>Location</Label>
                                 <Input
                                     id="location"
                                     type="text"
@@ -83,9 +83,19 @@ const BountyAddForm = () => {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label for='Notes'>Notes</Label>
+                                <Label for='notes'>Notes</Label>
                                 <textarea
                                     id="notes"
+                                    type="text"
+                                    className="w-100 p-1 ps-2 pe-2"
+                                    required
+                                    onChange={(e) => handleChange(e)}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label for='imageLocation'>Image URL</Label>
+                                <textarea
+                                    id="imageLocation"
                                     type="text"
                                     className="w-100 p-1 ps-2 pe-2"
                                     required

@@ -25,19 +25,19 @@ const Header = ({ isLoggedIn, userProfile }) => {
                             </div>
                         </div>
                         <div className="p-2 pe-4 d-flex align-items-center">
-                            <Link onClick={(e) => logout()} className="nav-link navbar-text p-0">
+                            <Link onClick={(e) => logout()} className="nav-link navbar-text navbar-gold-links p-0">
                                 Logout
                             </Link>
                         </div>
                     </> :
                     <> {/* Logged out, login/register */}
                         <div className="p-2 d-flex align-items-center">
-                            <Link to="/login" className="nav-link navbar-text p-0">
+                            <Link to="/login" className="nav-link navbar-text navbar-gold-links p-0">
                                 Login
                             </Link>
                         </div>
                         <div className="p-2 pe-4 d-flex align-items-center">
-                            <Link to="/register" className="nav-link navbar-text p-0">
+                            <Link to="/register" className="nav-link navbar-text navbar-gold-links p-0">
                                 Register
                             </Link>
                         </div>
