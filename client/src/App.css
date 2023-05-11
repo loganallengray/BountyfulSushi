@@ -29,22 +29,27 @@
   color: var(--gold);
 }
 
-/* .navbar-custom .navbar-brand:hover,
-.navbar-custom .navbar-text:hover {
-  mask-image: linear-gradient(-75deg, rgba(0, 0, 0, .6) 30%, #000 50%, rgba(0, 0, 0, .6) 70%);
-  mask-size: 200%;
-  animation: shine 2s;
+/* Button and Link CSS */
+
+.navbar-custom,
+.navbar-custom,
+.btn {
+  mask-image: linear-gradient(45deg, #000 25%, rgba(0, 0, 0, .2) 50%, #000 75%);
+  mask-image: linear-gradient(45deg, #000 25%, rgba(0, 0, 0, .2) 50%, #000 75%);
+  mask-size: 800%;
+  mask-size: 800%;
+  mask-position: 0;
+  mask-position: 0;
 }
 
-@keyframes shine {
-  from {
-    mask-position: 150%;
-  }
-
-  to {
-    mask-position: -50%;
-  }
-} */
+.navbar-custom:hover,
+.navbar-custom:hover,
+.btn:hover {
+  transition: mask-position 1s ease, mask-position 1s ease;
+  mask-position: 120%;
+  mask-position: 120%;
+  opacity: 1;
+}
 
 /* Form CSS */
 
