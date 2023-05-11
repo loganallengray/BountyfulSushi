@@ -274,9 +274,9 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Bounty ( [Name], [Description], Species, [Location], Notes, ImageLocation, Locked, DifficultyId )
+                        INSERT INTO Bounty ( [Name], [Description], Species, [Location], Notes, ImageLocation, DifficultyId )
                         OUTPUT INSERTED.ID
-                        VALUES ( @Name, @Description, @Species, @Location, @Notes, @ImageLocation, @Locked, @DifficultyId )";
+                        VALUES ( @Name, @Description, @Species, @Location, @Notes, @ImageLocation, @DifficultyId )";
                     cmd.Parameters.AddWithValue("@Name", bounty.Name);
                     cmd.Parameters.AddWithValue("@Description", bounty.Description);
                     cmd.Parameters.AddWithValue("@Species", DbUtils.ValueOrDBNull(bounty.Species));

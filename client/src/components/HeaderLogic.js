@@ -6,12 +6,12 @@ const HeaderLogic = ({ userProfile }) => {
             <>
                 <div className="d-flex">
                     <div className="p-2">
-                        <Link to={`/bounties`} className="nav-link navbar-text p-0">
+                        <Link to={`/bounties`} className="nav-link navbar-text navbar-gold-links p-0">
                             Bounty Management
                         </Link>
                     </div>
                     <div className="p-2">
-                        <Link to={`/users`} className="nav-link navbar-text p-0">
+                        <Link to={`/users`} className="nav-link navbar-text navbar-gold-links p-0">
                             User Management
                         </Link>
                     </div>
@@ -22,12 +22,12 @@ const HeaderLogic = ({ userProfile }) => {
         return (
             <>
                 <div className="p-2">
-                    <Link to="/bounties" className="nav-link navbar-text p-0">
+                    <Link to="/bounties" className="nav-link navbar-text navbar-gold-links p-0">
                         Bounties
                     </Link>
                 </div>
                 <div className="p-2">
-                    <Link to={`/bounties/user/${userProfile?.id}`} className="nav-link navbar-text p-0">
+                    <Link to={`/bounties/user/${userProfile?.id}`} className="nav-link navbar-text navbar-gold-links p-0">
                         My Bounties
                     </Link>
                 </div>

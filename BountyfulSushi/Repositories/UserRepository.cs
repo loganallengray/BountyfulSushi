@@ -82,7 +82,7 @@ namespace BountyfulSushi.Repositories
                             u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE FireBaseId = @FireBaseId && u.Locked != 1";
+                        WHERE FireBaseId = @FireBaseId AND u.Locked != 1";
 
                     DbUtils.AddParameter(cmd, "@FireBaseId", fireBaseId);
 
