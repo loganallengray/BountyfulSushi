@@ -65,7 +65,8 @@ const UserBountyDetails = ({ userProfile }) => {
                 </div>
                 <div className="flex-row-reverse justify-content-between align-items-top responsive-details">
                     <img src={bounty.imageLocation} width="100%" className="responsive-details-image" />
-                    <div className="d-flex flex-column justify-content-center w-100 p-4 bounty-details-card">
+                    <div className={typeof bounty.dateCompleted === "string" ? "d-flex flex-column justify-content-center w-100 p-4 bounty-details-card-complete"
+                        : "d-flex flex-column justify-content-center w-100 p-4 bounty-details-card"}>
                         <div>
                             <h1 className="m-0">{bounty.name}</h1>
                             <h2 className="m-0 mb-2">{bounty?.difficulty?.name}</h2>
