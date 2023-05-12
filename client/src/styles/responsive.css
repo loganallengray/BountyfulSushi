@@ -1,0 +1,21 @@
+@media (min-width: 992px) {
+    .responsive-bounty {
+        width: 25% !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .responsive-details {
+        border-radius: 20px 0px 0px 20px !important;
+        display: flex !important;
+    }
+
+    .responsive-details-image {
+        width: 60% !important;
+    }
+
+    .bounty-details-card,
+    .bounty-details-card-complete {
+        border-radius: 20px 0px 0px 20px !important;
+    }
+}

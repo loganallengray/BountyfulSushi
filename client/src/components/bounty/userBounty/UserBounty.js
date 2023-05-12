@@ -4,8 +4,9 @@ import { Button, Card, CardBody, CardSubtitle, CardText, CardTitle } from "react
 
 const UserBounty = ({ bounty, userId, handleRemovePopup }) => {
     return (
-        <Card className={typeof bounty.dateCompleted === "string" ? "complete-bounties m-2" : " m-2"}>
-            <CardBody className="d-flex justify-content-between align-items-center">
+        <Card className={typeof bounty.dateCompleted === "string" ? "complete-bounties responsive-bounty me-5 ms-5 mt-3 mb-3 pt-3" :
+            "responsive-bounty me-5 ms-5 mt-3 mb-3 pt-3"}>
+            <div className="d-flex align-items-center justify-content-between mb-3">
                 <div>
                     <CardTitle tag="h5">
                         <Link to={`/bounties/user/${userId}/${bounty.id}`}>
@@ -16,12 +17,11 @@ const UserBounty = ({ bounty, userId, handleRemovePopup }) => {
                         {bounty.difficulty.name}
                     </CardSubtitle>
                 </div>
-                <div>
-                    {bounty.dateCompleted === null ? <div className="d-flex align-items-center justify-content-center ms-3">
+                {bounty.dateCompleted === null ?
+                    <div className="d-flex justify-content-end m-0 pb-1">
                         <Button color="danger" className="ms-2" onClick={e => handleRemovePopup(bounty)}>X</Button>
                     </div> : ""}
-                </div>
-            </CardBody>
+            </div>
             <img src={bounty.imageLocation} />
             <CardBody>
                 <CardText className="mb-0">

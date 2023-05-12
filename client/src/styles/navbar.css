@@ -1,0 +1,30 @@
+/* Navbar Colors and States */
+.navbar-custom {
+    background-color: var(--navy-blue);
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: var(--gold) !important;
+}
+
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .navbar-text:hover {
+    color: var(--lighter-gold) !important;
+    text-shadow: 0px 0px 10px var(--gold);
+    transform: scale(1.1);
+}
+
+.navbar-custom .navbar-brand:active,
+.navbar-custom .navbar-text:active {
+    color: var(--lighter-gold) !important;
+    text-shadow: 0px 0px 10px var(--gold);
+    transform: scale(1);
+}
+
+.navbar-custom .navbar-brand:focus,
+.navbar-custom .navbar-text:focus {
+    color: var(--lighter-gold) !important;
+    text-shadow: 0px 0px 10px var(--gold);
+
+}
