@@ -179,9 +179,9 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [User] (FireBaseId, UserName, FirstName, LastName, Email, ImageLocation, Locked, UserTypeId)
+                        INSERT INTO [User] (FireBaseId, UserName, FirstName, LastName, Email, ImageLocation, Currency, Locked, UserTypeId)
                         OUTPUT INSERTED.ID
-                        VALUES (@FireBaseId, @UserName, @FirstName, @LastName, @Email, @ImageLocation, @Locked, @UserTypeId)";
+                        VALUES (@FireBaseId, @UserName, @FirstName, @LastName, @Email, @ImageLocation, @Currency, @Locked, @UserTypeId)";
 
                     DbUtils.AddParameter(cmd, "@FireBaseId", user.FireBaseId);
                     DbUtils.AddParameter(cmd, "@UserName", user.UserName);
@@ -189,6 +189,7 @@ namespace BountyfulSushi.Repositories
                     DbUtils.AddParameter(cmd, "@LastName", user.LastName);
                     DbUtils.AddParameter(cmd, "@Email", user.Email);
                     DbUtils.AddParameter(cmd, "@ImageLocation", user.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@Currency", 0);
                     DbUtils.AddParameter(cmd, "@Locked", user.Locked);
                     DbUtils.AddParameter(cmd, "@UserTypeId", user.UserType.Id);
 

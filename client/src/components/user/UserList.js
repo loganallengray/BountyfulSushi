@@ -66,10 +66,12 @@ const UserList = ({ userProfile }) => {
                                 <td className="align-middle">{user.firstName} {user.lastName}</td>
                                 <td className="align-middle">{user.userType.name}</td>
                                 <td className="text-end">
-                                    <Link to={`edit/${user.id}`}>
-                                        <Button color="primary">Edit</Button>
-                                    </Link>
-                                    {user.userType.id !== 1 ? <UserLockLogic user={user} handleLockPopup={handleLockPopup} /> : ""}
+                                    <div>
+                                        <Link to={`edit/${user.id}`}>
+                                            <Button color="primary">Edit</Button>
+                                        </Link>
+                                        {user.userType.id !== 1 ? <UserLockLogic user={user} handleLockPopup={handleLockPopup} /> : ""}
+                                    </div>
                                 </td>
                             </tr>
                         );

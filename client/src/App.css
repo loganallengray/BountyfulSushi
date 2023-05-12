@@ -1,50 +1,16 @@
+@import "styles/responsive.css";
+@import "styles/navbar.css";
+@import "styles/card.css";
+@import "styles/buttons.css";
+@import "styles/links.css";
+@import "styles/homepage.css";
+
 /* Color variables */
 :root {
-  --navy-blue: #003061;
+  --navy-blue: #00376e;
   --gold: #f2c261;
+  --lighter-gold: #FFE9BE;
 }
-
-/* Navbar Colors and States */
-.navbar-custom {
-  background-color: var(--navy-blue);
-}
-
-.navbar-custom .navbar-brand,
-.navbar-custom .navbar-text {
-  color: var(--gold);
-}
-
-.navbar-custom .navbar-brand:hover,
-.navbar-custom .navbar-text:hover {
-  color: var(--gold);
-}
-
-.navbar-custom .navbar-brand:active,
-.navbar-custom .navbar-text:active {
-  color: var(--gold);
-}
-
-.navbar-custom .navbar-brand:focus,
-.navbar-custom .navbar-text:focus {
-  color: var(--gold);
-}
-
-/* .navbar-custom .navbar-brand:hover,
-.navbar-custom .navbar-text:hover {
-  mask-image: linear-gradient(-75deg, rgba(0, 0, 0, .6) 30%, #000 50%, rgba(0, 0, 0, .6) 70%);
-  mask-size: 200%;
-  animation: shine 2s;
-}
-
-@keyframes shine {
-  from {
-    mask-position: 150%;
-  }
-
-  to {
-    mask-position: -50%;
-  }
-} */
 
 /* Form CSS */
 
@@ -59,7 +25,8 @@ textarea:focus {
 /* Bounty List CSS */
 
 .complete-bounties {
-  background-color: #CEFFC8 !important;
+  background-color: #E7FFE4 !important;
+  border: solid 1px #7FCF76 !important;
 }
 
 /* Rounded PFP Images */
