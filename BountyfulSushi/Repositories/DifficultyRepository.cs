@@ -20,7 +20,7 @@ namespace BountyfulSushi.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT 
-	                        Id, [Name] 
+	                        Id, [Name], Reward
                         FROM Difficulty;";
                     var reader = cmd.ExecuteReader();
 
@@ -47,7 +47,7 @@ namespace BountyfulSushi.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT 
-	                        Id, [Name] 
+	                        Id, [Name], Reward
                         FROM Difficulty;
                         WHERE Id = @id;";
 
@@ -76,10 +76,11 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Difficulty ( [Name] )
+                        INSERT INTO Difficulty ( [Name], Reward )
                         OUTPUT INSERTED.ID
-                        VALUES ( @Name )";
+                        VALUES ( @Name, @Reward )";
                     cmd.Parameters.AddWithValue("@Name", difficulty.Name);
+                    cmd.Parameters.AddWithValue("@Reward", difficulty.Reward);
 
                     difficulty.Id = (int)cmd.ExecuteScalar();
                 }
@@ -117,11 +118,13 @@ namespace BountyfulSushi.Repositories
                 {
                     cmd.CommandText = @"
                         UPDATE Difficulty
-                            SET Name = @Name
+                            SET Name = @Name,
+                            SET Reward = @Reward
                          WHERE Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", difficulty.Id);
                     cmd.Parameters.AddWithValue("@Name", difficulty.Name);
+                    cmd.Parameters.AddWithValue("@Reward", difficulty.Reward);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -134,6 +137,7 @@ namespace BountyfulSushi.Repositories
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                 Name = reader.GetString(reader.GetOrdinal("Name")),
+                Reward = reader.GetInt32(reader.GetOrdinal("Reward"))
             };
 
             return difficulty;
