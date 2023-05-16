@@ -24,7 +24,8 @@ namespace BountyfulSushi.Repositories
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
                             b.ImageLocation,
-	                        d.[Name] AS DifficultyName
+	                        d.[Name] AS DifficultyName,
+                            d.Reward AS DifficultyReward
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
                         ORDER BY (CASE WHEN b.DateCompleted IS NULL THEN 0 ELSE 1 END), b.DateCompleted DESC;";
@@ -55,7 +56,8 @@ namespace BountyfulSushi.Repositories
                         SELECT b.Id, b.[Name], b.[Description],
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.ImageLocation, 
-                            b.DifficultyId, d.[Name] AS DifficultyName
+                            b.DifficultyId, d.[Name] AS DifficultyName,
+                            d.Reward AS DifficultyReward
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
                         WHERE b.DateCompleted IS NULL";
@@ -90,6 +92,7 @@ namespace BountyfulSushi.Repositories
 	                        b.DateCompleted, b.DifficultyId,
                             b.ImageLocation,
 	                        d.[Name] AS DifficultyName,
+                            d.Reward AS DifficultyReward,
 	                        ub.UserId, u.FireBaseId, u.UserName, 
 	                        u.FirstName, u.LastName, u.Email,
                             u.ImageLocation AS UserImageLocation, u.Locked, 
@@ -155,6 +158,7 @@ namespace BountyfulSushi.Repositories
 	                        b.DateCompleted, b.DifficultyId,
                             b.ImageLocation,
 	                        d.[Name] AS DifficultyName,
+                            d.Reward AS DifficultyReward,
 	                        ub.UserId
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
@@ -204,6 +208,7 @@ namespace BountyfulSushi.Repositories
 	                        b.DateCompleted, b.DifficultyId,
                             b.ImageLocation,
 	                        d.[Name] AS DifficultyName,
+                            d.Reward AS DifficultyReward,
 	                        ub.UserId
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
@@ -241,7 +246,8 @@ namespace BountyfulSushi.Repositories
 	                        b.Species, b.[Location], b.Notes,
 	                        b.DateCompleted, b.DifficultyId,
                             b.ImageLocation,
-	                        d.[Name] AS DifficultyName
+	                        d.[Name] AS DifficultyName,
+                            d.Reward AS DifficultyReward
                         FROM Bounty b
 	                        LEFT JOIN Difficulty d ON b.DifficultyId = d.Id
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id
@@ -424,7 +430,8 @@ namespace BountyfulSushi.Repositories
                 Difficulty = new Difficulty()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("DifficultyId")),
-                    Name = reader.GetString(reader.GetOrdinal("DifficultyName"))
+                    Name = reader.GetString(reader.GetOrdinal("DifficultyName")),
+                    Reward = reader.GetInt32(reader.GetOrdinal("DifficultyReward"))
                 },
                 Users = new List<User>()
             };
