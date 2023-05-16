@@ -4,35 +4,35 @@ using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace BountyfulSushi.Controllers
+namespace BountyfulSushiOrder.Controllers
 {
-    public class SushiController : ControllerBase
+    public class SushiOrderController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly ISushiRepository _sushiRepository;
-        public SushiController(ISushiRepository sushiRepository, IUserRepository userRepository)
+        private readonly ISushiOrderRepository _sushiOrderRepository;
+        public SushiOrderController(ISushiOrderRepository sushiOrderRepository, IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _sushiRepository = sushiRepository;
+            _sushiOrderRepository = sushiOrderRepository;
         }
 
-        // GET: api/<SushiController>
+        // GET: api/<SushiOrderController>
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_sushiRepository.GetAll());
+            return Ok(_sushiOrderRepository.GetAll());
         }
 
-        // GET api/<SushiController>/5
+        // GET api/<SushiOrderController>/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return Ok(_sushiRepository.GetById(id));
+            return Ok(_sushiOrderRepository.GetById(id));
         }
 
-        // POST api/<SushiController>
+        // POST api/<SushiOrderController>
         [HttpPost]
-        public IActionResult Post(Sushi sushi)
+        public IActionResult Post(SushiOrder sushiOrder)
         {
             var currentUser = GetCurrentUser();
 
@@ -41,13 +41,13 @@ namespace BountyfulSushi.Controllers
                 return Unauthorized();
             }
 
-            _sushiRepository.Add(sushi);
-            return CreatedAtAction("Get", new { id = sushi.Id }, sushi);
+            _sushiOrderRepository.Add(sushiOrder);
+            return CreatedAtAction("Get", new { id = sushiOrder.Id }, sushiOrder);
         }
 
-        // PUT api/<SushiController>/5
+        // PUT api/<SushiOrderController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(Sushi sushi)
+        public IActionResult Put(SushiOrder sushiOrder)
         {
             var currentUser = GetCurrentUser();
 
@@ -56,11 +56,11 @@ namespace BountyfulSushi.Controllers
                 return Unauthorized();
             }
 
-            _sushiRepository.Update(sushi);
+            _sushiOrderRepository.Update(sushiOrder);
             return NoContent();
         }
 
-        // DELETE api/<SushiController>/5
+        // DELETE api/<SushiOrderController>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -71,7 +71,7 @@ namespace BountyfulSushi.Controllers
                 return Unauthorized();
             }
 
-            _sushiRepository.Delete(id);
+            _sushiOrderRepository.Delete(id);
             return NoContent();
         }
 

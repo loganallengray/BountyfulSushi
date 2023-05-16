@@ -36,6 +36,7 @@ namespace BountyfulSushi
             services.AddTransient<IBountyRepository, BountyRepository>();
             services.AddTransient<IDifficultyRepository, DifficultyRepository>();
             services.AddTransient<ISushiRepository, SushiRepository>();
+            services.AddTransient<ISushiOrderRepository, SushiOrderRepository>();
 
             var firebaseProjectId = Configuration.GetValue<string>("FirebaseProjectId");
             var googleTokenUrl = $"https://securetoken.google.com/{firebaseProjectId}";
