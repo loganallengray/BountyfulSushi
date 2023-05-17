@@ -14,6 +14,7 @@ import UserList from "./user/UserList";
 import UserDetails from "./user/UserDetails";
 import UserEditForm from "./user/UserEditForm";
 import SushiList from "./sushi/SushiList";
+import SushiDetails from "./sushi/SushiDetails";
 
 const ApplicationView = ({ isLoggedIn, userProfile }) => {
     if (userProfile?.userType?.id === 1) {
@@ -36,8 +37,8 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                     </Route>
                     <Route path="sushi">
                         <Route index element={isLoggedIn ? <SushiList userProfile={userProfile} /> : <Navigate to="/login" />} />
-                        {/* <Route path=":id" element={isLoggedIn ? <SushiDetails /> : <Navigate to="/login" />} />
-                        <Route path="add" element={isLoggedIn ? <SushiAddForm /> : <Navigate to="/login" />} /> */}
+                        <Route path=":id" element={isLoggedIn ? <SushiDetails /> : <Navigate to="/login" />} />
+                        {/* <Route path="add" element={isLoggedIn ? <SushiAddForm /> : <Navigate to="/login" />} /> */}
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
@@ -58,8 +59,8 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                     </Route>
                     <Route path="sushi">
                         <Route index element={isLoggedIn ? <SushiList userProfile={userProfile} /> : <Navigate to="/login" />} />
-                        {/* <Route path=":id" element={isLoggedIn ? <SushiDetails /> : <Navigate to="/login" />} />
-                        <Route path="add" element={isLoggedIn ? <SushiAddForm /> : <Navigate to="/login" />} /> */}
+                        <Route path=":id" element={isLoggedIn ? <SushiDetails /> : <Navigate to="/login" />} />
+                        {/* <Route path="add" element={isLoggedIn ? <SushiAddForm /> : <Navigate to="/login" />} /> */}
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
