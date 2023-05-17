@@ -16,14 +16,14 @@ const SushiDetailsLogic = ({ sushi, userProfile }) => {
             .then(e => navigate(".."))
     }
 
-    if (userProfile?.userType?.id !== 1 && sushi?.users?.find(user => user?.id === userProfile?.id) === undefined) {
+    if (userProfile?.userType?.id !== 1) {
         return (
             <div className="text-center mt-2">
                 <Label for='order' className="d-block">Order Sushi?</Label>
                 <Button color="success" onClick={e => handleOrder()}>Order</Button>
             </div>
         );
-    } else if (userProfile?.userType?.id === 1 && sushi.dateCompleted === null && sushi.users.length !== 0) {
+    } else {
         return "";
     }
 }

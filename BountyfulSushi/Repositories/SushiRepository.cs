@@ -64,7 +64,7 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Bounty b ON b.Id = s.BountyId
 	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id 
 	                        LEFT JOIN [User] u ON u.Id = ub.UserId
-                        WHERE s.Id = 1";
+                        WHERE s.Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
 
                     var reader = cmd.ExecuteReader();
