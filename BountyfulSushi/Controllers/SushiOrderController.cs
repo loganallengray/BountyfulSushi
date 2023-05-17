@@ -40,11 +40,6 @@ namespace BountyfulSushiOrder.Controllers
         {
             var currentUser = GetCurrentUser();
 
-            if (currentUser.UserType.Id != 1)
-            {
-                return Unauthorized();
-            }
-
             _sushiOrderRepository.Add(sushiOrder);
             return CreatedAtAction("Get", new { id = sushiOrder.Id }, sushiOrder);
         }
@@ -55,11 +50,6 @@ namespace BountyfulSushiOrder.Controllers
         {
             var currentUser = GetCurrentUser();
 
-            if (currentUser.UserType.Id != 1)
-            {
-                return Unauthorized();
-            }
-
             _sushiOrderRepository.Update(sushiOrder);
             return NoContent();
         }
@@ -69,11 +59,6 @@ namespace BountyfulSushiOrder.Controllers
         public IActionResult Delete(int id)
         {
             var currentUser = GetCurrentUser();
-
-            if (currentUser.UserType.Id != 1)
-            {
-                return Unauthorized();
-            }
 
             _sushiOrderRepository.Delete(id);
             return NoContent();

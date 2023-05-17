@@ -7,6 +7,8 @@ const SushiDetailsLogic = ({ sushi, userProfile }) => {
     const navigate = useNavigate();
 
     const handleOrder = (e) => {
+        e.preventDefault();
+
         const sushiOrder = {
             userId: userProfile.id,
             sushiId: sushi.id
@@ -20,7 +22,7 @@ const SushiDetailsLogic = ({ sushi, userProfile }) => {
         return (
             <div className="text-center mt-2">
                 <Label for='order' className="d-block">Order Sushi?</Label>
-                <Button color="success" onClick={e => handleOrder()}>Order</Button>
+                <Button color="success" onClick={e => handleOrder(e)}>Order</Button>
             </div>
         );
     } else {
