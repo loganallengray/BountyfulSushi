@@ -38,7 +38,7 @@ const BountyDetailsLogic = ({ bounty, userProfile }) => {
         return (
             <div className="text-center mt-2">
                 <Label for='accept' className="d-block">Accept Bounty?</Label>
-                <Button color="success" onClick={e => handleAccept()}>Accept</Button>
+                <Button color="success" onClick={e => handleAccept(e)}>Accept</Button>
             </div>
         );
     } else if (userProfile?.userType?.id === 1 && bounty.dateCompleted === null && bounty.users.length !== 0) {

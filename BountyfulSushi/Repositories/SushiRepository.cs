@@ -58,9 +58,12 @@ namespace BountyfulSushi.Repositories
 	                        b.[Name] AS BountyName, 
 	                        b.[Description] AS BountyDescription,
 	                        b.Species, b.[Location], b.Notes,
-	                        b.ImageLocation AS BountyImageLocation
+	                        b.ImageLocation AS BountyImageLocation,
+	                        u.UserName
                         FROM Sushi s
 	                        LEFT JOIN Bounty b ON b.Id = s.BountyId
+	                        LEFT JOIN UserBounty ub ON ub.BountyId = b.Id 
+	                        LEFT JOIN [User] u ON u.Id = ub.UserId
                         WHERE s.Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
 
@@ -71,6 +74,14 @@ namespace BountyfulSushi.Repositories
                     if (reader.Read())
                     {
                         sushi = MakeSushi(reader);
+
+                        if (DbUtils.IsNotDbNull(reader, "UserName"))
+                        {
+                            sushi.Bounty.Users.Add(new User
+                            {
+                                UserName = reader.GetString(reader.GetOrdinal("UserName"))
+                            });
+                        }
                     }
 
                     reader.Close();
@@ -170,7 +181,8 @@ namespace BountyfulSushi.Repositories
                     Species = DbUtils.GetNullableString(reader, "Species"),
                     Location = DbUtils.GetNullableString(reader, "Location"),
                     Notes = DbUtils.GetNullableString(reader, "Notes"),
-                    ImageLocation = DbUtils.GetNullableString(reader, "BountyImageLocation")
+                    ImageLocation = DbUtils.GetNullableString(reader, "BountyImageLocation"),
+                    Users = new List<User>()
                 }
             };
 

@@ -4,10 +4,16 @@
     width: 50%;
 }
 
+#homepage-1,
+#homepage-2,
+#homepage-3 {
+    min-height: 100vh;
+    padding: 30px;
+}
+
 #homepage-1 {
     background-image: url(https://images.pexels.com/photos/2098134/pexels-photo-2098134.jpeg);
     background-size: cover;
-    height: 100vh;
     color: var(--gold);
 }
 
@@ -18,7 +24,6 @@
 #homepage-3 {
     background-image: url(https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg);
     background-size: cover;
-    height: 100vh;
     color: var(--gold);
 }
 

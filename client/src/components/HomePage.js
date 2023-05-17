@@ -15,8 +15,8 @@ const HomePage = () => {
                         That is where Bountyful Sushi comes in.</p>
                 </div>
             </div>
-            <div id="homepage-2" className="d-flex flex-column justify-content-around align-items-center text-center vh-100">
-                <div className="w-50">
+            <div id="homepage-2" className="d-flex flex-column justify-content-around align-items-center text-center">
+                <div>
                     <h1>Joining and Participating</h1>
                     <p>Anyone can register an account and become a user on Bountyful Sushi.
                         Once you do, you will have access to the Bounties and My Bounties pages.
@@ -26,7 +26,7 @@ const HomePage = () => {
                         Once you accept a bounty, you are free to unaccept it on your My Bounties page.
                     </p>
                 </div>
-                <div className="w-50">
+                <div>
                     <h1>Completing Bounties</h1>
                     <p>Mr. Fujimoto requires fresh fish, if you do hope to meet his standards then get in your bounties
                         as soon as possible.
@@ -36,7 +36,7 @@ const HomePage = () => {
                         be others working on the same bounty as you. First come, first serve.
                     </p>
                 </div>
-                <div className="w-50">
+                <div>
                     <h1>Sweet Victory</h1>
                     <p>Once you have completed a bounty, you are awarded an amount of tokens, based upon how
                         difficult to complete the bounty was. With these tokens, you can purchase a

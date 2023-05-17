@@ -1,11 +1,15 @@
 ﻿using BountyfulSushi.Models;
 using BountyfulSushi.Repositories;
 using BountyfulSushi.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BountyfulSushi.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
     public class SushiController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
