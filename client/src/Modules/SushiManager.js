@@ -13,9 +13,9 @@ export const getAllSushi = () => {
     })
 };
 
-export const getSushiById = (userId) => {
+export const getSushiById = (id) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/user/${userId}`, {
+        return fetch(`${baseUrl}/${id}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -2,7 +2,7 @@ import { getToken } from "./AuthManager";
 
 const baseUrl = '/api/sushiorder';
 
-export const getAllSushi = () => {
+export const getAllSushiOrders = () => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}`, {
             method: "GET",
@@ -13,9 +13,9 @@ export const getAllSushi = () => {
     })
 };
 
-export const getSushiById = (userId) => {
+export const getSushiOrderById = (id) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/user/${userId}`, {
+        return fetch(`${baseUrl}/${id}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -24,7 +24,7 @@ export const getSushiById = (userId) => {
     })
 };
 
-export const addSushi = (sushi) => {
+export const addSushiOrder = (sushiOrder) => {
     return getToken().then((token) => {
         return fetch(baseUrl, {
             method: "POST",
@@ -32,25 +32,25 @@ export const addSushi = (sushi) => {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(sushi),
+            body: JSON.stringify(sushiOrder),
         });
     })
 };
 
-export const editSushi = (sushi) => {
+export const editSushiOrder = (sushiOrder) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${sushi.id}`, {
+        return fetch(`${baseUrl}/${sushiOrder.id}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(sushi)
+            body: JSON.stringify(sushiOrder)
         });
     })
 };
 
-export const deleteSushi = (id) => {
+export const deleteSushiOrder = (id) => {
     return getToken().then((token) => {
         return fetch(`${baseUrl}/${id}`, {
             method: "DELETE",
