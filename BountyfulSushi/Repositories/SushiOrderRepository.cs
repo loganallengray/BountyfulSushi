@@ -19,7 +19,7 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT s.Id, so.SushiId, s.[Name] AS SushiName, 
+                        SELECT so.Id, so.SushiId, s.[Name] AS SushiName, 
 	                        s.[Description] AS SushiDescription,
 	                        s.Price, s.Inventory, 
 	                        s.ImageLocation AS SushiImageLocation,

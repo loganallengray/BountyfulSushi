@@ -17,6 +17,7 @@ import SushiList from "./sushi/SushiList";
 import SushiDetails from "./sushi/SushiDetails";
 import SushiAddForm from "./sushi/SushiAddForm";
 import SushiEditForm from "./sushi/SushiEditForm";
+import OrderList from "./orders/OrderList";
 
 const ApplicationView = ({ isLoggedIn, userProfile }) => {
     if (userProfile?.userType?.id === 1) {
@@ -42,6 +43,9 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                         <Route path=":id" element={isLoggedIn ? <SushiDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
                         <Route path="add" element={isLoggedIn ? <SushiAddForm /> : <Navigate to="/login" />} />
                         <Route path="edit/:id" element={isLoggedIn ? <SushiEditForm userProfile={userProfile} /> : <Navigate to="/login" />} />
+                    </Route>
+                    <Route path="orders">
+                        <Route index element={isLoggedIn ? <OrderList userProfile={userProfile} /> : <Navigate to="/login" />} />
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
