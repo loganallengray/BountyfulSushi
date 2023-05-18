@@ -17,7 +17,7 @@ import SushiList from "./sushi/SushiList";
 import SushiDetails from "./sushi/SushiDetails";
 import SushiAddForm from "./sushi/SushiAddForm";
 import SushiEditForm from "./sushi/SushiEditForm";
-import OrderList from "./orders/OrderList";
+import OrderList from "./sushi/orders/OrderList";
 
 const ApplicationView = ({ isLoggedIn, userProfile, setUserProfile }) => {
     if (userProfile?.userType?.id === 1) {

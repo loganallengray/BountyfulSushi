@@ -4,7 +4,7 @@ import { Button, Card, CardBody, CardSubtitle, CardText, CardTitle } from "react
 
 const Order = ({ order, handleCompletePopup, handleDeletePopup }) => {
     return (
-        <Card className="responsive-card me-5 ms-5 mt-3 mb-3 pt-3">
+        <Card className={typeof order.dateCompleted === "string" ? "complete-bounties responsive-card me-5 ms-5 mt-3 mb-3 pt-3" : "responsive-card me-5 ms-5 mt-3 mb-3 pt-3"}>
             <div className="d-flex align-items-center justify-content-between mb-3 mb-3">
                 <div>
                     <CardTitle tag="h5">
@@ -19,7 +19,7 @@ const Order = ({ order, handleCompletePopup, handleDeletePopup }) => {
                     </CardSubtitle>
                 </div>
                 <div className="d-flex flex-column align-items-end ms-3">
-                    <Button color="success" className="mb-2" onClick={e => handleCompletePopup(order)}>Complete</Button>
+                    {typeof order.dateCompleted === "string" ? "" : <Button color="success" className="mb-2" onClick={e => handleCompletePopup(order)}>Complete</Button>}
                     <Button color="danger" onClick={e => handleDeletePopup(order)}>X</Button>
                 </div>
             </div>

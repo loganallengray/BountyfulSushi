@@ -40,7 +40,7 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Bounty b ON b.Id = s.BountyId
 	                        LEFT JOIN [User] u ON u.Id = so.UserId
 	                        LEFT JOIN UserType ut ON ut.Id = u.UserTypeId
-                        ORDER BY so.DateCreated DESC;";
+                        ORDER BY (CASE WHEN so.DateCompleted IS NULL THEN 0 ELSE 1 END), so.DateCreated DESC;";
                     var reader = cmd.ExecuteReader();
 
                     var sushiOrders = new List<SushiOrder>();
@@ -140,10 +140,18 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         DELETE FROM SushiOrder
                         WHERE Id = @id
-
-                        UPDATE [User]
-                            SET Currency = Currency + @Price
-                        WHERE Id = @UserId;
+                        
+                        IF NOT EXISTS (
+	                        SELECT * 
+	                        FROM SushiOrder
+	                        WHERE Id = 8 AND DateCompleted IS NOT NULL
+                        )
+                        
+                        BEGIN
+                            UPDATE [User]
+                                SET Currency = Currency + @Price
+                            WHERE Id = @UserId
+                        END;
                     ";
                     cmd.Parameters.AddWithValue("@id", sushiOrder.Id);
                     cmd.Parameters.AddWithValue("@UserId", sushiOrder.User.Id);

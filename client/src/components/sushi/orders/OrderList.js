@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getAllSushiOrders } from "../../modules/SushiOrder";
+import { getAllSushiOrders } from "../../../modules/SushiOrder";
 import Order from "./Order";
 import OrderDeletePopup from "./OrderDeletePopup";
 import OrderCompletePopup from "./OrderCompletePopup";
 
-const OrderList = ({ userProfile }) => {
+const OrderList = () => {
     const [orders, setOrders] = useState([]);
     const [completePopup, setCompletePopup] = useState({
         show: false,

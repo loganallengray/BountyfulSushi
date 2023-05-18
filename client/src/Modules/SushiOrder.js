@@ -38,9 +38,9 @@ export const addSushiOrder = (sushiOrder) => {
     })
 };
 
-export const editSushiOrder = (sushiOrder) => {
+export const completeSushiOrder = (sushiOrder) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${sushiOrder.id}`, {
+        return fetch(`${baseUrl}/complete/${sushiOrder.id}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
