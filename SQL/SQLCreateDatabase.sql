@@ -75,7 +75,9 @@ GO
 CREATE TABLE [SushiOrder] (
   [Id] int PRIMARY KEY IDENTITY(1, 1),
   [SushiId] int NOT NULL,
-  [UserId] int NOT NULL
+  [UserId] int NOT NULL,
+  [DateCreated] datetime NOT NULL,
+  [DateCompleted] datetime
 )
 GO
 

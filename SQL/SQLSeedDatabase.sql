@@ -12,12 +12,12 @@ VALUES
 
 INSERT INTO [User] (FirebaseId, UserName, FirstName, LastName, Email, ImageLocation, Currency, Locked, UserTypeId)
 VALUES 
-    ('123456789abcdef', 'Jirossushi', 'Jiro', 'Fujimoto', 'jirossushi@example.com', 'https://images.pexels.com/photos/2098085/pexels-photo-2098085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 0, 0, 1),
-    ('123456789abcdef', 'Mysteryman', 'John', 'Smith', 'john.smith@example.com', 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 40, 0, 2),
-    ('234567890bcdefg', 'MaybeJane', 'Jane', 'Doe', 'jane.doe@example.com', 'https://images.pexels.com/photos/3646160/pexels-photo-3646160.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 25, 0, 2),
-    ('34567890cdefgh', 'Kalex', 'Alex', 'Kim', 'alex.kim@example.com', 'https://images.pexels.com/photos/5384445/pexels-photo-5384445.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 20, 0, 2),
-    ('456789', 'MasterAngler', 'Bob', 'Johnson', 'bob.johnson@example.com', 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 10, 0, 2),
-    ('56789', 'Chene', 'Emily', 'Chen', 'emily.chen@example.com', 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 5, 0, 2);
+    ('8GLs1YrrM0X8a32TbeupiaOvay73', 'Jirossushi', 'Jiro', 'Fujimoto', 'jirossushi@example.com', 'https://images.pexels.com/photos/2098085/pexels-photo-2098085.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 0, 0, 1),
+    ('dNLwF9uGGPfr9iTxGKcyBVdhyBw2', 'Mysteryman', 'John', 'Smith', 'john.smith@example.com', 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 40, 0, 2),
+    ('MTWS3S8JsPTQQhkY1T8DR4Mn0DW2', 'MaybeJane', 'Jane', 'Doe', 'jane.doe@example.com', 'https://images.pexels.com/photos/3646160/pexels-photo-3646160.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 25, 0, 2),
+    ('fvWJw6BDIHVzkgFwTtt2znIhI9L2', 'Kalex', 'Alex', 'Kim', 'alex.kim@example.com', 'https://images.pexels.com/photos/5384445/pexels-photo-5384445.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 20, 0, 2),
+    ('i4t13zWE3nhSWRF0ZRy7Q7Nda9J2', 'MasterAngler', 'Bob', 'Johnson', 'bob.johnson@example.com', 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 10, 0, 2),
+    ('NMRsdiGm6SerE7v8sebpBXm4mSC2', 'Chene', 'Emily', 'Chen', 'emily.chen@example.com', 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 5, 0, 2);
 
 INSERT INTO Bounty ([Name], [Description], Species, [Location], Notes, DateCompleted, ImageLocation, DifficultyId)
 VALUES 
@@ -61,13 +61,13 @@ VALUES
     ('Bass Sushi', 'Fresh Bass and rice', 8, 30, 'https://images.pexels.com/photos/2098143/pexels-photo-2098143.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 11),
     ('Pike Roll', 'Grilled Pike and avocado', 12, 20, 'https://images.pexels.com/photos/1148086/pexels-photo-1148086.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 12);
 
-INSERT INTO SushiOrder (SushiId, UserId)
+INSERT INTO SushiOrder (SushiId, UserId, DateCreated, DateCompleted)
 VALUES
-    (1, 2),
-    (1, 5),
-    (2, 4),
-    (2, 3),
-    (3, 6),
-    (3, 5),
-    (4, 2),
-    (4, 3);
+    (1, 2, '2/11/2023 12:05:34 PM', NULL),
+    (1, 5, '1/15/2023 12:05:34 PM', NULL),
+    (2, 4, '12/13/2022 12:05:34 PM', NULL),
+    (2, 3, '10/9/2022 12:05:34 PM', NULL),
+    (3, 6, '9/20/2022 12:05:34 PM', NULL),
+    (3, 5, '5/23/2022 12:05:34 PM', NULL),
+    (4, 2, '3/19/2022 12:05:34 PM', '3/22/2022 12:05:34 PM'),
+    (4, 3, '2/22/2022 12:05:34 PM', '2/25/2022 12:05:34 PM');

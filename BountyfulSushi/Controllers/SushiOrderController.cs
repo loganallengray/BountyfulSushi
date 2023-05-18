@@ -28,40 +28,55 @@ namespace BountyfulSushiOrder.Controllers
         }
 
         // GET api/<SushiOrderController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("user/{userId}")]
+        public IActionResult GetByUserId(int userId)
         {
-            return Ok(_sushiOrderRepository.GetById(id));
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id == 1 || currentUser.Id == userId)
+            {
+                return Ok(_sushiOrderRepository.GetByUserId(userId));
+            }
+
+            return Unauthorized();
         }
 
         // POST api/<SushiOrderController>
         [HttpPost]
         public IActionResult Post(SushiOrder sushiOrder)
         {
-            var currentUser = GetCurrentUser();
-
             _sushiOrderRepository.Add(sushiOrder);
             return CreatedAtAction("Get", new { id = sushiOrder.Id }, sushiOrder);
         }
 
         // PUT api/<SushiOrderController>/5
-        [HttpPut("{id}")]
-        public IActionResult Put(SushiOrder sushiOrder)
+        [HttpPut("complete/{id}")]
+        public IActionResult Complete(SushiOrder sushiOrder)
         {
             var currentUser = GetCurrentUser();
 
-            _sushiOrderRepository.Update(sushiOrder);
-            return NoContent();
+            if (currentUser.UserType.Id == 1)
+            {
+                _sushiOrderRepository.Complete(sushiOrder);
+                return NoContent();
+            }
+
+            return Unauthorized();
         }
 
         // DELETE api/<SushiOrderController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(SushiOrder sushiOrder)
         {
             var currentUser = GetCurrentUser();
 
-            _sushiOrderRepository.Delete(id);
-            return NoContent();
+            if (currentUser.UserType.Id == 1 || sushiOrder.UserId == currentUser.Id)
+            {
+                _sushiOrderRepository.Delete(sushiOrder);
+                return NoContent();
+            }
+
+            return Unauthorized();
         }
 
         private User GetCurrentUser()

@@ -404,11 +404,16 @@ namespace BountyfulSushi.Repositories
                             SET DateCompleted = @DateCompleted
                          WHERE Id = @BountyId
 
+                        UPDATE [User]
+                            SET Currency = Currency + @Reward
+                        WHERE Id = @UserId
+
                         DELETE FROM UserBounty
                         WHERE BountyId = @BountyId AND UserId != @UserId;";
 
                     cmd.Parameters.AddWithValue("@BountyId", userBounty.BountyId);
                     cmd.Parameters.AddWithValue("@UserId", userBounty.UserId);
+                    cmd.Parameters.AddWithValue("@Reward", userBounty.Bounty.Difficulty.Reward);
                     cmd.Parameters.AddWithValue("@DateCompleted", DateTime.Now);
 
                     cmd.ExecuteNonQuery();

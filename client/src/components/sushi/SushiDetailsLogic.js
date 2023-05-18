@@ -1,20 +1,31 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Label, Button } from "reactstrap";
-import { addSushiOrder } from "../../modules/SushiOrder";
+import { addSushiOrder } from "../../modules/SushiOrderManager";
+import { me } from "../../modules/AuthManager";
 
-const SushiDetailsLogic = ({ sushi, userProfile }) => {
+const SushiDetailsLogic = ({ sushi, userProfile, setUserProfile }) => {
     const navigate = useNavigate();
 
     const handleOrder = (e) => {
         e.preventDefault();
 
-        const sushiOrder = {
-            userId: userProfile.id,
-            sushiId: sushi.id
-        }
+        if (userProfile.currency >= sushi.price) {
+            const sushiOrder = {
+                userId: userProfile.id,
+                sushiId: sushi.id,
+                sushi: sushi
+            }
 
-        addSushiOrder(sushiOrder)
+            addSushiOrder(sushiOrder)
+                .then(e => afterAdd())
+        } else {
+            window.alert("You do not have enough tokens to purchase this sushi.")
+        }
+    }
+
+    const afterAdd = () => {
+        me().then(userProfile => setUserProfile(userProfile))
             .then(e => navigate(".."))
     }
 

@@ -4,7 +4,7 @@ import { Button, Card, CardBody, CardSubtitle, CardText, CardTitle } from "react
 
 const Sushi = ({ sushi, userProfile, handleDeletePopup }) => {
     return (
-        <Card className="responsive-bounty me-5 ms-5 mt-3 mb-3 pt-3">
+        <Card className="responsive-card me-5 ms-5 mt-3 mb-3 pt-3">
             <div className="d-flex align-items-center justify-content-between mb-3 mb-3">
                 <div>
                     <CardTitle tag="h5">

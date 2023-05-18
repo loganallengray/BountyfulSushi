@@ -23,7 +23,7 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         SELECT u.Id, u.FireBaseId, u.UserName, 
                             u.FirstName, u.LastName, u.Email,
-                            u.ImageLocation, u.Locked,
+                            u.ImageLocation, u.Currency, u.Locked,
                             u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.Id
@@ -78,7 +78,7 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         SELECT u.Id, u.FireBaseId, u.UserName, 
                             u.FirstName, u.LastName, u.Email,
-                            u.ImageLocation, u.Locked,
+                            u.ImageLocation, u.Currency, u.Locked,
                             u.UserTypeId, ut.[Name] AS UserTypeName
                         FROM [User] u
                             LEFT JOIN UserType ut ON u.UserTypeId = ut.id
@@ -110,7 +110,7 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         SELECT u.Id, u.FireBaseId, u.UserName, 
                             u.FirstName, u.LastName, u.Email,
-                            u.ImageLocation, u.Locked,
+                            u.ImageLocation, u.Currency, u.Locked,
                             u.UserTypeId, ut.[Name] AS UserTypeName,
                             ub.BountyId, b.[Name] AS BountyName,
                             b.[Description] AS BountyDescription,
@@ -269,6 +269,7 @@ namespace BountyfulSushi.Repositories
                 FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                 LastName = reader.GetString(reader.GetOrdinal("LastName")),
                 Email = reader.GetString(reader.GetOrdinal("Email")),
+                Currency = reader.GetInt32(reader.GetOrdinal("Currency")),
                 Locked = reader.GetBoolean(reader.GetOrdinal("Locked")),
                 ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                 UserType = new UserType()

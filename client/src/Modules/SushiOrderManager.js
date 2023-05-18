@@ -1,3 +1,4 @@
+import { json } from "react-router-dom";
 import { getToken } from "./AuthManager";
 
 const baseUrl = '/api/sushiorder';
@@ -13,9 +14,9 @@ export const getAllSushiOrders = () => {
     })
 };
 
-export const getSushiOrderById = (id) => {
+export const getSushiOrderByUserId = (userId) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${id}`, {
+        return fetch(`${baseUrl}/user/${userId}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -37,9 +38,9 @@ export const addSushiOrder = (sushiOrder) => {
     })
 };
 
-export const editSushiOrder = (sushiOrder) => {
+export const completeSushiOrder = (sushiOrder) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${sushiOrder.id}`, {
+        return fetch(`${baseUrl}/complete/${sushiOrder.id}`, {
             method: "PUT",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -50,13 +51,15 @@ export const editSushiOrder = (sushiOrder) => {
     })
 };
 
-export const deleteSushiOrder = (id) => {
+export const deleteSushiOrder = (sushiOrder) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${id}`, {
+        return fetch(`${baseUrl}/${sushiOrder.id}`, {
             method: "DELETE",
             headers: {
-                Authorization: `Bearer ${token}`
-            }
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(sushiOrder)
         });
     })
 };

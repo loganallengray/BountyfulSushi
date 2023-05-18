@@ -10,6 +10,9 @@ const HeaderLogic = ({ userProfile }) => {
                 <Link to={`/sushi`} className="nav-link navbar-text navbar-gold-links">
                     Sushi
                 </Link>
+                <Link to={`/orders`} className="nav-link navbar-text navbar-gold-links">
+                    Orders
+                </Link>
                 <Link to={`/users`} className="nav-link navbar-text navbar-gold-links">
                     Users
                 </Link>
@@ -26,6 +29,9 @@ const HeaderLogic = ({ userProfile }) => {
                 </Link>
                 <Link to={`/bounties/user/${userProfile?.id}`} className="nav-link navbar-text navbar-gold-links">
                     My Bounties
+                </Link>
+                <Link to={`/orders/${userProfile?.id}`} className="nav-link navbar-text navbar-gold-links">
+                    My Orders
                 </Link>
             </>
         )

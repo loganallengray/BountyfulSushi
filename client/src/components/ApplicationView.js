@@ -17,8 +17,10 @@ import SushiList from "./sushi/SushiList";
 import SushiDetails from "./sushi/SushiDetails";
 import SushiAddForm from "./sushi/SushiAddForm";
 import SushiEditForm from "./sushi/SushiEditForm";
+import OrderList from "./sushi/orders/OrderList";
+import UserOrderList from "./sushi/orders/userOrder/UserOrderList";
 
-const ApplicationView = ({ isLoggedIn, userProfile }) => {
+const ApplicationView = ({ isLoggedIn, userProfile, setUserProfile }) => {
     if (userProfile?.userType?.id === 1) {
         return (
             <Routes>
@@ -39,9 +41,12 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                     </Route>
                     <Route path="sushi">
                         <Route index element={isLoggedIn ? <SushiList userProfile={userProfile} /> : <Navigate to="/login" />} />
-                        <Route path=":id" element={isLoggedIn ? <SushiDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
+                        <Route path=":id" element={isLoggedIn ? <SushiDetails userProfile={userProfile} setUserProfile={setUserProfile} /> : <Navigate to="/login" />} />
                         <Route path="add" element={isLoggedIn ? <SushiAddForm /> : <Navigate to="/login" />} />
                         <Route path="edit/:id" element={isLoggedIn ? <SushiEditForm userProfile={userProfile} /> : <Navigate to="/login" />} />
+                    </Route>
+                    <Route path="orders">
+                        <Route index element={isLoggedIn ? <OrderList /> : <Navigate to="/login" />} />
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
@@ -62,7 +67,10 @@ const ApplicationView = ({ isLoggedIn, userProfile }) => {
                     </Route>
                     <Route path="sushi">
                         <Route index element={isLoggedIn ? <SushiList userProfile={userProfile} /> : <Navigate to="/login" />} />
-                        <Route path=":id" element={isLoggedIn ? <SushiDetails userProfile={userProfile} /> : <Navigate to="/login" />} />
+                        <Route path=":id" element={isLoggedIn ? <SushiDetails userProfile={userProfile} setUserProfile={setUserProfile} /> : <Navigate to="/login" />} />
+                    </Route>
+                    <Route path="orders">
+                        <Route path=":userId" element={isLoggedIn ? <UserOrderList userProfile={userProfile} setUserProfile={setUserProfile} /> : <Navigate to="/login" />} />
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />
