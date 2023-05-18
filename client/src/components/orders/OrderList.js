@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import { getAllSushiOrders } from "../../modules/SushiOrder";
 import Order from "./Order";
 import OrderDeletePopup from "./OrderDeletePopup";
+import OrderCompletePopup from "./OrderCompletePopup";
 
 const OrderList = ({ userProfile }) => {
     const [orders, setOrders] = useState([]);
-    const [popup, setPopup] = useState({
+    const [completePopup, setCompletePopup] = useState({
         show: false,
-        orders: {}
+        order: {}
+    });
+    const [deletePopup, setDeletePopup] = useState({
+        show: false,
+        order: {}
     });
 
     const getOrders = () => {
@@ -18,19 +23,31 @@ const OrderList = ({ userProfile }) => {
         getOrders();
     }, []);
 
-    const handleDeletePopup = (orders) => {
-        setPopup({ show: true, orders: orders })
+    const handleCompletePopup = (order) => {
+        setCompletePopup({ show: true, order: order })
     }
 
-    const togglePopup = () => {
-        const copy = { ...popup };
+    const toggleCompletePopup = () => {
+        const copy = { ...completePopup };
 
-        copy.show = !popup.show;
+        copy.show = !completePopup.show;
 
-        setPopup(copy);
+        setCompletePopup(copy);
     }
 
-    const afterDelete = () => {
+    const handleDeletePopup = (order) => {
+        setDeletePopup({ show: true, order: order })
+    }
+
+    const toggleDeletePopup = () => {
+        const copy = { ...deletePopup };
+
+        copy.show = !deletePopup.show;
+
+        setDeletePopup(copy);
+    }
+
+    const afterConfirm = () => {
         getOrders();
     }
 
@@ -39,9 +56,10 @@ const OrderList = ({ userProfile }) => {
             <div className="container mt-3 mb-1">
                 <div className="row justify-content-center">
                     {orders.map((order) => (
-                        <Order order={order} key={order.id} handleDeletePopup={handleDeletePopup} />
+                        <Order order={order} key={order.id} handleCompletePopup={handleCompletePopup} handleDeletePopup={handleDeletePopup} />
                     ))}
-                    <OrderDeletePopup popup={popup} togglePopup={togglePopup} afterDelete={afterDelete} />
+                    <OrderDeletePopup popup={deletePopup} togglePopup={toggleDeletePopup} afterDelete={afterConfirm} />
+                    <OrderCompletePopup popup={completePopup} togglePopup={toggleCompletePopup} afterComplete={afterConfirm} />
                 </div>
             </div>
         </>

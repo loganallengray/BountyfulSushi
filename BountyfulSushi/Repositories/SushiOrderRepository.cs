@@ -2,6 +2,7 @@
 using BountyfulSushi.Repositories.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Tabloid.Utils;
 
@@ -19,7 +20,8 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT so.Id, so.SushiId, s.[Name] AS SushiName, 
+                        SELECT so.Id, so.SushiId, so.DateCreated,
+                            so.DateCompleted, s.[Name] AS SushiName, 
 	                        s.[Description] AS SushiDescription,
 	                        s.Price, s.Inventory, 
 	                        s.ImageLocation AS SushiImageLocation,
@@ -37,7 +39,8 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Sushi s ON s.id = so.SushiId
 	                        LEFT JOIN Bounty b ON b.Id = s.BountyId
 	                        LEFT JOIN [User] u ON u.Id = so.UserId
-	                        LEFT JOIN UserType ut ON ut.Id = u.UserTypeId;";
+	                        LEFT JOIN UserType ut ON ut.Id = u.UserTypeId
+                        ORDER BY so.DateCreated DESC;";
                     var reader = cmd.ExecuteReader();
 
                     var sushiOrders = new List<SushiOrder>();
@@ -62,7 +65,8 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT so.Id, so.SushiId, s.[Name] AS SushiName, 
+                        SELECT so.Id, so.SushiId, so.DateCreated,
+                            so.DateCompleted, s.[Name] AS SushiName, 
 	                        s.[Description] AS SushiDescription,
 	                        s.Price, s.Inventory, 
 	                        s.ImageLocation AS SushiImageLocation,
@@ -108,11 +112,12 @@ namespace BountyfulSushi.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO SushiOrder ( SushiId, UserId )
+                        INSERT INTO SushiOrder ( SushiId, UserId, DateCreated )
                         OUTPUT INSERTED.ID
-                        VALUES ( @SushiId, @UserId )";
+                        VALUES ( @SushiId, @UserId, @DateCreated )";
                     cmd.Parameters.AddWithValue("@SushiId", sushiOrder.SushiId);
                     cmd.Parameters.AddWithValue("@UserId", sushiOrder.UserId);
+                    cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
 
                     sushiOrder.Id = (int)cmd.ExecuteScalar();
                 }
@@ -166,6 +171,7 @@ namespace BountyfulSushi.Repositories
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                 SushiId = reader.GetInt32(reader.GetOrdinal("SushiId")),
+                DateCreated = reader.GetDateTime(reader.GetOrdinal("DateCreated")),
                 Sushi = new Sushi()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("SushiId")),
@@ -204,6 +210,11 @@ namespace BountyfulSushi.Repositories
                     Bounties = new List<Bounty>()
                 }
             };
+
+            if (DbUtils.IsNotDbNull(reader, "DateCompleted"))
+            {
+                sushiOrder.DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted");
+            }
 
             return sushiOrder;
         }
