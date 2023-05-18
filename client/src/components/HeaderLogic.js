@@ -30,6 +30,9 @@ const HeaderLogic = ({ userProfile }) => {
                 <Link to={`/bounties/user/${userProfile?.id}`} className="nav-link navbar-text navbar-gold-links">
                     My Bounties
                 </Link>
+                <Link to={`/orders/${userProfile?.id}`} className="nav-link navbar-text navbar-gold-links">
+                    My Orders
+                </Link>
             </>
         )
     }

@@ -1,5 +1,5 @@
 import { Modal, ModalBody, Button, ModalHeader, ModalFooter } from "reactstrap";
-import { deleteSushiOrder } from "../../../modules/SushiOrder";
+import { deleteSushiOrder } from "../../../modules/SushiOrderManager";
 
 const OrderDeletePopup = ({ popup, togglePopup, afterDelete }) => {
     const handleDelete = () => {

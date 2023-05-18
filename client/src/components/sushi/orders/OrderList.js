@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllSushiOrders } from "../../../modules/SushiOrder";
+import { getAllSushiOrders } from "../../../modules/SushiOrderManager";
 import Order from "./Order";
 import OrderDeletePopup from "./OrderDeletePopup";
 import OrderCompletePopup from "./OrderCompletePopup";

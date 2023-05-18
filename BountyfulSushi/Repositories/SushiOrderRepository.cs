@@ -57,7 +57,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public SushiOrder GetById(int id)
+        public List<SushiOrder> GetByUserId(int id)
         {
             using (var conn = Connection)
             {
@@ -84,22 +84,23 @@ namespace BountyfulSushi.Repositories
 	                        LEFT JOIN Sushi s ON s.id = so.SushiId
 	                        LEFT JOIN Bounty b ON b.Id = s.BountyId
 	                        LEFT JOIN [User] u ON u.Id = so.UserId
-	                        LEFT JOIN UserType ut ON ut.Id = u.UserTypeId;
-                        WHERE so.Id = @id";
-                    cmd.Parameters.AddWithValue("@id", id);
+	                        LEFT JOIN UserType ut ON ut.Id = u.UserTypeId
+                        WHERE so.UserId = @UserId
+                        ORDER BY (CASE WHEN so.DateCompleted IS NULL THEN 0 ELSE 1 END), so.DateCreated DESC;";
+                    cmd.Parameters.AddWithValue("@UserId", id);
 
                     var reader = cmd.ExecuteReader();
 
-                    var sushiOrder = new SushiOrder();
+                    var sushiOrders = new List<SushiOrder>();
 
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        sushiOrder = MakeSushiOrder(reader);
+                        sushiOrders.Add(MakeSushiOrder(reader));
                     }
 
                     reader.Close();
 
-                    return sushiOrder;
+                    return sushiOrders;
                 }
             }
         }
@@ -144,7 +145,7 @@ namespace BountyfulSushi.Repositories
                         IF NOT EXISTS (
 	                        SELECT * 
 	                        FROM SushiOrder
-	                        WHERE Id = 8 AND DateCompleted IS NOT NULL
+	                        WHERE Id = @id AND DateCompleted IS NOT NULL
                         )
                         
                         BEGIN

@@ -28,10 +28,17 @@ namespace BountyfulSushiOrder.Controllers
         }
 
         // GET api/<SushiOrderController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("user/{userId}")]
+        public IActionResult GetByUserId(int userId)
         {
-            return Ok(_sushiOrderRepository.GetById(id));
+            var currentUser = GetCurrentUser();
+
+            if (currentUser.UserType.Id == 1 || currentUser.Id == userId)
+            {
+                return Ok(_sushiOrderRepository.GetByUserId(userId));
+            }
+
+            return Unauthorized();
         }
 
         // POST api/<SushiOrderController>
@@ -63,7 +70,7 @@ namespace BountyfulSushiOrder.Controllers
         {
             var currentUser = GetCurrentUser();
 
-            if (currentUser.UserType.Id == 1)
+            if (currentUser.UserType.Id == 1 || sushiOrder.UserId == currentUser.Id)
             {
                 _sushiOrderRepository.Delete(sushiOrder);
                 return NoContent();

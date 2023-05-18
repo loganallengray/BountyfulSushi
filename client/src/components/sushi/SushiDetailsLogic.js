@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Label, Button } from "reactstrap";
-import { addSushiOrder } from "../../modules/SushiOrder";
+import { addSushiOrder } from "../../modules/SushiOrderManager";
 import { me } from "../../modules/AuthManager";
 
 const SushiDetailsLogic = ({ sushi, userProfile, setUserProfile }) => {

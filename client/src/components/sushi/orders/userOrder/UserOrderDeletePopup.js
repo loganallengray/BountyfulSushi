@@ -1,17 +1,18 @@
 import { Modal, ModalBody, Button, ModalHeader, ModalFooter } from "reactstrap";
-import { completeSushiOrder } from "../../../modules/SushiOrderManager";
+import { deleteSushiOrder } from "../../../../modules/SushiOrderManager";
+import { me } from "../../../../modules/AuthManager";
 
-const OrderCompletePopup = ({ popup, togglePopup, afterComplete }) => {
-    const handleComplete = () => {
-        completeSushiOrder(popup.order)
-            .then(e => afterComplete())
+const UserOrderDeletePopup = ({ popup, togglePopup, afterDelete }) => {
+    const handleDelete = () => {
+        deleteSushiOrder(popup.order)
+            .then(e => afterDelete())
             .then(e => togglePopup());
     }
 
     return (
         <Modal isOpen={popup.show} toggle={togglePopup}>
             <ModalHeader>
-                Complete Order?
+                Cancel Order?
             </ModalHeader>
             <ModalBody>
                 <p>
@@ -22,11 +23,11 @@ const OrderCompletePopup = ({ popup, togglePopup, afterComplete }) => {
                 </p>
             </ModalBody>
             <ModalFooter className="text-center">
-                <Button color="success" onClick={e => handleComplete()}>Confirm</Button>
+                <Button color="danger" onClick={e => handleDelete()}>Confirm</Button>
                 <Button color="primary" onClick={e => togglePopup()}>Cancel</Button>
             </ModalFooter>
         </Modal>
     );
 }
 
-export default OrderCompletePopup;
+export default UserOrderDeletePopup;

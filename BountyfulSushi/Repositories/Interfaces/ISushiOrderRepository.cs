@@ -9,7 +9,7 @@ namespace BountyfulSushi.Repositories.Interfaces
         void Add(SushiOrder sushiOrder);
         void Delete(SushiOrder sushiOrder);
         List<SushiOrder> GetAll();
-        SushiOrder GetById(int id);
+        List<SushiOrder> GetByUserId(int id);
         SushiOrder MakeSushiOrder(SqlDataReader reader);
         void Update(SushiOrder sushiOrder);
         void Complete(SushiOrder sushiOrder);
