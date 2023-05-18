@@ -2,8 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Label, Button } from "reactstrap";
 import { addSushiOrder } from "../../modules/SushiOrder";
+import { me } from "../../modules/AuthManager";
 
-const SushiDetailsLogic = ({ sushi, userProfile }) => {
+const SushiDetailsLogic = ({ sushi, userProfile, setUserProfile }) => {
     const navigate = useNavigate();
 
     const handleOrder = (e) => {
@@ -11,10 +12,16 @@ const SushiDetailsLogic = ({ sushi, userProfile }) => {
 
         const sushiOrder = {
             userId: userProfile.id,
-            sushiId: sushi.id
+            sushiId: sushi.id,
+            sushi: sushi
         }
 
         addSushiOrder(sushiOrder)
+            .then(e => afterAdd())
+    }
+
+    const afterAdd = () => {
+        me().then(userProfile => setUserProfile(userProfile))
             .then(e => navigate(".."))
     }
 

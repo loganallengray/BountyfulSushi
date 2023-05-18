@@ -18,10 +18,11 @@ const Header = ({ isLoggedIn, userProfile }) => {
                     <>  {/* Logged in account options */}
                         <div className="nav-link navbar-text p-2 d-flex">
                             <div className="d-flex align-items-center me-2">
-                                <img src={userProfile?.imageLocation} width="30px" height="30px" className="rounded-images" />
+                                <img src={userProfile?.imageLocation} width="45px" height="45px" className="rounded-images" />
                             </div>
-                            <div className="d-flex align-items-center">
-                                {userProfile?.userName}
+                            <div className="d-flex flex-column">
+                                <p className="m-0 p-0">{userProfile?.userName}</p>
+                                <p className="m-0 p-0">{userProfile?.userType?.id === 1 ? "Admin" : `${userProfile?.currency} Tokens`}</p>
                             </div>
                         </div>
                         <div className="p-2 pe-4 d-flex align-items-center">

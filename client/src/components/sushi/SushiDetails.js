@@ -6,7 +6,7 @@ import { getSushiById } from "../../modules/SushiManager";
 import SushiDeletePopup from "./SushiDeletePopup";
 import SushiDetailsLogic from "./SushiDetailsLogic";
 
-const SushiDetails = ({ userProfile }) => {
+const SushiDetails = ({ userProfile, setUserProfile }) => {
     const [sushi, setSushi] = useState({});
     const [popup, setPopup] = useState({
         show: false,
@@ -80,7 +80,7 @@ const SushiDetails = ({ userProfile }) => {
                                     Caught by {sushi?.bounty?.users[0]?.userName}
                                 </div>
                                 <div>
-                                    <SushiDetailsLogic sushi={sushi} userProfile={userProfile} />
+                                    <SushiDetailsLogic sushi={sushi} userProfile={userProfile} setUserProfile={setUserProfile} />
                                 </div>
                             </div>
                         </div>

@@ -12,6 +12,7 @@ namespace BountyfulSushi.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string ImageLocation { get; set; }
+        public int Currency { get; set; }
         public Boolean Locked { get; set; }
         public UserType UserType { get; set; }
         public List<Bounty> Bounties { get; set; }

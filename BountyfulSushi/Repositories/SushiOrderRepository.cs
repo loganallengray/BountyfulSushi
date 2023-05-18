@@ -114,10 +114,15 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         INSERT INTO SushiOrder ( SushiId, UserId, DateCreated )
                         OUTPUT INSERTED.ID
-                        VALUES ( @SushiId, @UserId, @DateCreated )";
+                        VALUES ( @SushiId, @UserId, @DateCreated )
+
+                        UPDATE [User]
+                            SET Currency = Currency - @Price
+                        WHERE Id = @UserId;";
                     cmd.Parameters.AddWithValue("@SushiId", sushiOrder.SushiId);
                     cmd.Parameters.AddWithValue("@UserId", sushiOrder.UserId);
                     cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@Price", sushiOrder.Sushi.Price);
 
                     sushiOrder.Id = (int)cmd.ExecuteScalar();
                 }
@@ -159,6 +164,31 @@ namespace BountyfulSushi.Repositories
                     cmd.Parameters.AddWithValue("@Id", sushiOrder.Id);
                     cmd.Parameters.AddWithValue("@SushiId", sushiOrder.SushiId);
                     cmd.Parameters.AddWithValue("@UserId", sushiOrder.UserId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Complete(SushiOrder sushiOrder)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE SushiOrder
+                            SET DateCompleted = @DateCompleted
+                        WHERE Id = @SushiOrderId
+
+                        UPDATE Sushi
+                            SET Inventory = Inventory - 1
+                        WHERE Id = @SushiId;";
+
+                    cmd.Parameters.AddWithValue("@SushiOrderId", sushiOrder.Id);
+                    cmd.Parameters.AddWithValue("@DateCompleted", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@SushiId", sushiOrder.SushiId);
 
                     cmd.ExecuteNonQuery();
                 }
