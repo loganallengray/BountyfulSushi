@@ -1,3 +1,4 @@
+import { json } from "react-router-dom";
 import { getToken } from "./AuthManager";
 
 const baseUrl = '/api/sushiorder';
@@ -50,13 +51,15 @@ export const editSushiOrder = (sushiOrder) => {
     })
 };
 
-export const deleteSushiOrder = (id) => {
+export const deleteSushiOrder = (sushiOrder) => {
     return getToken().then((token) => {
-        return fetch(`${baseUrl}/${id}`, {
+        return fetch(`${baseUrl}/${sushiOrder.id}`, {
             method: "DELETE",
             headers: {
-                Authorization: `Bearer ${token}`
-            }
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(sushiOrder)
         });
     })
 };

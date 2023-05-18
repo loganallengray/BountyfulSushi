@@ -129,7 +129,7 @@ namespace BountyfulSushi.Repositories
             }
         }
 
-        public void Delete(int id)
+        public void Delete(SushiOrder sushiOrder)
         {
             using (SqlConnection conn = Connection)
             {
@@ -140,8 +140,14 @@ namespace BountyfulSushi.Repositories
                     cmd.CommandText = @"
                         DELETE FROM SushiOrder
                         WHERE Id = @id
+
+                        UPDATE [User]
+                            SET Currency = Currency + @Price
+                        WHERE Id = @UserId;
                     ";
-                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@id", sushiOrder.Id);
+                    cmd.Parameters.AddWithValue("@UserId", sushiOrder.User.Id);
+                    cmd.Parameters.AddWithValue("@Price", sushiOrder.Sushi.Price);
 
                     cmd.ExecuteNonQuery();
                 }

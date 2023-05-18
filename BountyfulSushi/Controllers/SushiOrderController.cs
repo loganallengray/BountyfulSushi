@@ -56,11 +56,11 @@ namespace BountyfulSushiOrder.Controllers
 
         // DELETE api/<SushiOrderController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(SushiOrder sushiOrder)
         {
             var currentUser = GetCurrentUser();
 
-            _sushiOrderRepository.Delete(id);
+            _sushiOrderRepository.Delete(sushiOrder);
             return NoContent();
         }
 

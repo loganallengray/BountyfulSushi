@@ -3,7 +3,7 @@ import { deleteSushiOrder } from "../../modules/SushiOrder";
 
 const OrderDeletePopup = ({ popup, togglePopup, afterDelete }) => {
     const handleDelete = () => {
-        deleteSushiOrder(popup.order.id)
+        deleteSushiOrder(popup.order)
             .then(e => afterDelete())
             .then(e => togglePopup());
     }
