@@ -10,14 +10,18 @@ const SushiDetailsLogic = ({ sushi, userProfile, setUserProfile }) => {
     const handleOrder = (e) => {
         e.preventDefault();
 
-        const sushiOrder = {
-            userId: userProfile.id,
-            sushiId: sushi.id,
-            sushi: sushi
-        }
+        if (userProfile.currency >= sushi.price) {
+            const sushiOrder = {
+                userId: userProfile.id,
+                sushiId: sushi.id,
+                sushi: sushi
+            }
 
-        addSushiOrder(sushiOrder)
-            .then(e => afterAdd())
+            addSushiOrder(sushiOrder)
+                .then(e => afterAdd())
+        } else {
+            window.alert("You do not have enough tokens to purchase this sushi.")
+        }
     }
 
     const afterAdd = () => {

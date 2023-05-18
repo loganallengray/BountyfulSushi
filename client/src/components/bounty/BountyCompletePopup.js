@@ -21,7 +21,8 @@ const UserBountyCompletePopup = ({ popup, togglePopup }) => {
         if (userChoice !== 0) {
             const userBounty = {
                 userId: userChoice,
-                bountyId: popup.bounty.id
+                bountyId: popup.bounty.id,
+                bounty: popup.bounty
             }
 
             completeBounty(userBounty)
