@@ -22,6 +22,10 @@ function App() {
     }
   }, [isLoggedIn]);
 
+  const updateUser = () => {
+    me().then(setUserProfile);
+  }
+
   if (isLoggedIn === null) {
     return <Spinner className="app-spinner dark" />;
   }
@@ -29,7 +33,7 @@ function App() {
   return (
     <Router>
       <Header isLoggedIn={isLoggedIn} userProfile={userProfile} />
-      <ApplicationView isLoggedIn={isLoggedIn} userProfile={userProfile} setUserProfile={setUserProfile} />
+      <ApplicationView isLoggedIn={isLoggedIn} userProfile={userProfile} updateUser={updateUser} />
     </Router>
   );
 }
