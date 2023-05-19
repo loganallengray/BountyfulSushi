@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import UserOrderDeletePopup from "./UserOrderDeletePopup";
 import { me } from "../../../../modules/AuthManager";
 
-const UserOrderList = (userProfile, setUserProfile) => {
+const UserOrderList = ({ userProfile, updateUser }) => {
     const [orders, setOrders] = useState([]);
     const [deletePopup, setDeletePopup] = useState({
         show: false,
@@ -36,6 +36,7 @@ const UserOrderList = (userProfile, setUserProfile) => {
 
     const afterDelete = () => {
         getOrders();
+        updateUser();
     }
 
     return (
@@ -45,7 +46,7 @@ const UserOrderList = (userProfile, setUserProfile) => {
                     {orders.map((order) => (
                         <UserOrder order={order} key={order.id} handleDeletePopup={handleDeletePopup} />
                     ))}
-                    <UserOrderDeletePopup popup={deletePopup} togglePopup={toggleDeletePopup} afterDelete={afterDelete} setUserProfile={setUserProfile} />
+                    <UserOrderDeletePopup popup={deletePopup} togglePopup={toggleDeletePopup} afterDelete={afterDelete} />
                 </div>
             </div>
         </>

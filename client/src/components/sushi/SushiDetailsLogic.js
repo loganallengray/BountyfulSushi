@@ -4,7 +4,7 @@ import { Label, Button } from "reactstrap";
 import { addSushiOrder } from "../../modules/SushiOrderManager";
 import { me } from "../../modules/AuthManager";
 
-const SushiDetailsLogic = ({ sushi, userProfile, setUserProfile }) => {
+const SushiDetailsLogic = ({ sushi, userProfile, updateUser }) => {
     const navigate = useNavigate();
 
     const handleOrder = (e) => {
@@ -18,15 +18,11 @@ const SushiDetailsLogic = ({ sushi, userProfile, setUserProfile }) => {
             }
 
             addSushiOrder(sushiOrder)
-                .then(e => afterAdd())
+                .then(e => updateUser())
+                .then(e => navigate(".."))
         } else {
             window.alert("You do not have enough tokens to purchase this sushi.")
         }
-    }
-
-    const afterAdd = () => {
-        me().then(userProfile => setUserProfile(userProfile))
-            .then(e => navigate(".."))
     }
 
     if (userProfile?.userType?.id !== 1) {
