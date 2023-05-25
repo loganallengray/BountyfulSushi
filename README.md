@@ -13,6 +13,7 @@ When designing this app, the main goal I had was to have two types of users, reg
 ## How to Use
 
 I am looking to deploy this app in the future, as there are many, many steps to set it up on your own device. If you want to see the site in action currently, I've done a demo of it in video form, which can be viewed here: https://youtu.be/uiaTIZ55f8I?list=PLvvquqSQ_WqTvNIWWiTB1XukPrJSddXop
+
 Also make sure to check out some of my other classmate's capstones.
 
 ## Development
